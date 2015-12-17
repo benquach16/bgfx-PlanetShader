@@ -13,5 +13,9 @@ BGFX_ALL=$(BGFX_DIRECTORY)*.o
 LDFLAGS += $(LIBRARIES)
 LDFLAGS += -static 
 
-build_all:
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) main.cpp
+all: baseapplication.o
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL)  baseapplication.o main.cpp -o renderer
+
+
+baseapplication.o: baseapplication.h baseapplication.cpp
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c  
