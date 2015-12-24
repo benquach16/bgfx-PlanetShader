@@ -22,6 +22,7 @@
 class BaseApplication
 {
 public:
+	bgfx::ProgramHandle loadProgram(const char* _vsName, const char* _fsName);
 	BaseApplication();
 	~BaseApplication();
 
@@ -31,6 +32,7 @@ protected:
 	SDL_Window *m_mainWindow;
 	int m_width;
 	int m_height;
+	bx::CrtFileReader *m_reader;
 };
 
 

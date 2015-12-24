@@ -99,15 +99,15 @@ static bgfx::ShaderHandle loadShader(bx::FileReaderI* _reader, const char* _name
 
 	return bgfx::createShader(loadMem(_reader, filePath) );
 }
-bx::CrtFileReader *_reader = new bx::CrtFileReader;
-bgfx::ProgramHandle loadProgram(const char* _vsName, const char* _fsName)
+
+bgfx::ProgramHandle BaseApplication::loadProgram(const char* _vsName, const char* _fsName)
 {
 
-	bgfx::ShaderHandle vsh = loadShader(_reader, _vsName);
+	bgfx::ShaderHandle vsh = loadShader(m_reader, _vsName);
 	bgfx::ShaderHandle fsh = BGFX_INVALID_HANDLE;
 	if (NULL != _fsName)
 	{
-		fsh = loadShader(_reader, _fsName);
+		fsh = loadShader(m_reader, _fsName);
 	}
 
 	return bgfx::createProgram(vsh, fsh, true /* destroy shaders when program is destroyed */);
@@ -116,6 +116,7 @@ bgfx::ProgramHandle loadProgram(const char* _vsName, const char* _fsName)
 
 BaseApplication::BaseApplication() : m_mainWindow(0)
 {
+	m_reader = new bx::CrtFileReader;
 	m_width = 1280;
 	m_height = 800;
 }
@@ -126,6 +127,7 @@ BaseApplication::~BaseApplication()
 	bgfx::shutdown();
 	SDL_DestroyWindow(m_mainWindow);
 	SDL_Quit();
+	delete m_reader;
 }
 
 void BaseApplication::run()
@@ -155,7 +157,7 @@ void BaseApplication::run()
 	// Set view 0 clear state.
 	bgfx::setViewClear(0
 					   , BGFX_CLEAR_COLOR|BGFX_CLEAR_DEPTH
-					   , 0x3030ffff
+					   , 0x303030ff
 					   , 1.0f
 					   , 0);
 
@@ -231,14 +233,22 @@ void BaseApplication::run()
 			bgfx::setViewRect(0, 0, 0, m_width, m_height);
 		}
 
+		bgfx::touch(0);
+		float mtx[16];
+		bx::mtxRotateXY(mtx, 5, 10);
+		mtx[14] = 0.0f;
 
-
+		// Set model matrix for rendering.
+		bgfx::setTransform(mtx);
+		// Set vertex and index buffer.
+		bgfx::setVertexBuffer(m_vbh);
+		bgfx::setIndexBuffer(m_ibh);
 
 		// Set render states.
 		bgfx::setState(BGFX_STATE_DEFAULT);
 
 		// Submit primitive for rendering to view 0.
-		//bgfx::submit(0,program);
+		bgfx::submit(0,program);
 		
 		while(SDL_PollEvent(&event))
 		{
