@@ -9,6 +9,10 @@
 #include <stdio.h>
 #include <bx/thread.h>
 #include <bx/handlealloc.h>
+#include <bx/fpumath.h>
+#include <bx/readerwriter.h>
+#include <bx/string.h>
+
 #include <tinystl/allocator.h>
 #include <tinystl/string.h>
 
