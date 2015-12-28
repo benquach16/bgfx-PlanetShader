@@ -8,7 +8,7 @@ INCLUDES=-I$(BGFX_DIRECTORY)include/ -I$(BX_DIRECTORY)include/ -I$(BGFX_DIRECTOR
 LIBRARIES=-L$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src
 GCC=g++
 SHADERC=$(BGFX_DIRECTORY)/tools/bin/linux/shaderc
-USERCXXFLAGS= -g
+USERCXXFLAGS= -g -std=c++14
 
 #make sure we have XLIB and SDL2 packages first!!!
 #if you do not please use your package manager to install them
@@ -27,10 +27,10 @@ baseapplication.o: baseapplication.h baseapplication.cpp
 makeshaders: makeshadervert makeshaderfrag
 
 makeshadervert: vs.sc
-	$(SHADERC) -f vs.sc -o shaders/glsl/vs.bin --type v --platform linux --varyingdef varying.def.sc --verbose --bin2c
+	$(SHADERC) -f vs.sc -o shaders/glsl/vs.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose 
 
 makeshaderfrag: fs.sc
-	$(SHADERC) -f fs.sc -o shaders/glsl/fs.bin --type f --platform linux --varyingdef varying.def.sc --verbose --bin2c
+	$(SHADERC) -f fs.sc -o shaders/glsl/fs.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose 
 
 clean:
 	rm *.o renderer

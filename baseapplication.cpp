@@ -22,7 +22,7 @@ struct PosColorVertex
 bgfx::VertexDecl PosColorVertex::ms_decl;
 static PosColorVertex s_cubeVertices[8] =
 {
-	{-1.0f,  1.0f,  1.0f, 0xff000000 },
+	{-1.0f,  1.0f,  1.0f, 0xff0000ff },
 	{ 1.0f,  1.0f,  1.0f, 0xff0000ff },
 	{-1.0f, -1.0f,  1.0f, 0xff00ff00 },
 	{ 1.0f, -1.0f,  1.0f, 0xff00ffff },
@@ -147,7 +147,7 @@ void BaseApplication::run()
 	bgfx::sdlSetWindow(m_mainWindow);
 	bgfx::renderFrame();
 
-	bgfx::init( bgfx::RendererType::OpenGL, BGFX_PCI_ID_AMD);
+	bgfx::init( bgfx::RendererType::OpenGL);
 
 	uint32_t debug = BGFX_DEBUG_TEXT;
 	uint32_t reset = BGFX_RESET_VSYNC;
@@ -180,62 +180,37 @@ void BaseApplication::run()
 
 
 	bgfx::ProgramHandle program = loadProgram("vs", "fs");
-
 	while (!exit)
 	{
 		// Set view 0 default viewport.
 		bgfx::setViewRect(0, 0, 0, m_width, m_height);
 
-		// This dummy draw call is here to make sure that view 0 is cleared
-		// if no other draw calls are submitted to view 0.
-		bgfx::touch(0);
 
 		// Use debug font to print information about this example.
 		bgfx::dbgTextClear();
 		bgfx::dbgTextPrintf(0, 1, 0x4f, "test");
 		bgfx::dbgTextPrintf(0, 2, 0x6f, "Description: Initialization and debug text.");
 
-		// Advance to next frame. Rendering thread will be kicked to
-		// process submitted rendering primitives.
-		bgfx::frame();
+
 
 		
 		float at[3]  = { 0.0f, 0.0f,  0.0f };
-		float eye[3] = { 0.0f, 0.0f, -7.0f };
-		// Set view and projection matrix for view 0.
-		const bgfx::HMD* hmd = bgfx::getHMD();
-		if (NULL != hmd && 0 != (hmd->flags & BGFX_HMD_RENDERING) )
-		{
-			float view[16];
-			bx::mtxQuatTranslationHMD(view, hmd->eye[0].rotation, eye);
+		float eye[3] = { 0.0f, 0.0f, -10.0f };
 
-			float proj[16];
-			bx::mtxProj(proj, hmd->eye[0].fov, 0.1f, 100.0f);
+		float view[16];
+		bx::mtxLookAt(view, eye, at);
 
-			bgfx::setViewTransform(0, view, proj);
+		float proj[16];
+		bx::mtxProj(proj, 60.0f, float(m_width)/float(m_height), 0.1f, 100.0f);
+		bgfx::setViewTransform(0, view, proj);
 
-			// Set view 0 default viewport.
-			//
-			// Use HMD's width/height since HMD's internal frame buffer size
-			// might be much larger than window size.
-			bgfx::setViewRect(0, 0, 0, hmd->width, hmd->height);
-		}
-		else
-		{
-			float view[16];
-			bx::mtxLookAt(view, eye, at);
+		// Set view 0 default viewport.
+		bgfx::setViewRect(0, 0, 0, m_width, m_height);
 
-			float proj[16];
-			bx::mtxProj(proj, 60.0f, float(m_width)/float(m_height), 0.1f, 100.0f);
-			bgfx::setViewTransform(0, view, proj);
-
-			// Set view 0 default viewport.
-			bgfx::setViewRect(0, 0, 0, m_width, m_height);
-		}
 
 		bgfx::touch(0);
 		float mtx[16];
-		bx::mtxRotateXY(mtx, 5, 10);
+		bx::mtxRotateXY(mtx, 20, 70);
 		mtx[14] = 0.0f;
 
 		// Set model matrix for rendering.
@@ -249,6 +224,10 @@ void BaseApplication::run()
 
 		// Submit primitive for rendering to view 0.
 		bgfx::submit(0,program);
+
+		// Advance to next frame. Rendering thread will be kicked to
+		// process submitted rendering primitives.
+		bgfx::frame();
 		
 		while(SDL_PollEvent(&event))
 		{
@@ -264,5 +243,7 @@ void BaseApplication::run()
 
 
 	}
+
+	bgfx::destroyProgram(program);
 
 }
