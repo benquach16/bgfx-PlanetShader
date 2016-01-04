@@ -1,12 +1,18 @@
 #include "baseapplication.h"
 
 
+
 struct PosColorVertex
 {
 	float m_x;
 	float m_y;
 	float m_z;
+
 	uint32_t m_abgr;
+
+	float n_x;
+	float n_y;
+	float n_z;
 
 	static void init()
 		{
@@ -14,22 +20,22 @@ struct PosColorVertex
 				.begin()
 				.add(bgfx::Attrib::Position, 3, bgfx::AttribType::Float)
 				.add(bgfx::Attrib::Color0,   4, bgfx::AttribType::Uint8, true)
+				.add(bgfx::Attrib::Normal,   3, bgfx::AttribType::Float)
 				.end();
 		};
-
 	static bgfx::VertexDecl ms_decl;
 };
 bgfx::VertexDecl PosColorVertex::ms_decl;
 static PosColorVertex s_cubeVertices[8] =
 {
-	{-1.0f,  1.0f,  1.0f, 0xff0000ff },
-	{ 1.0f,  1.0f,  1.0f, 0xff0000ff },
-	{-1.0f, -1.0f,  1.0f, 0xff00ff00 },
-	{ 1.0f, -1.0f,  1.0f, 0xff00ffff },
-	{-1.0f,  1.0f, -1.0f, 0xffff0000 },
-	{ 1.0f,  1.0f, -1.0f, 0xffff00ff },
-	{-1.0f, -1.0f, -1.0f, 0xffffff00 },
-	{ 1.0f, -1.0f, -1.0f, 0xffffffff },
+	{-1.0f,  1.0f,  1.0f, 0xff0000ff, -0.33f, 0.33f, 0.33f},
+	{ 1.0f,  1.0f,  1.0f, 0xff0000ff, 0.33f, 0.33f, 0.33f},
+	{-1.0f, -1.0f,  1.0f, 0xff00ff00, -0.33f, -0.33f, 0.33f},
+	{ 1.0f, -1.0f,  1.0f, 0xff00ffff, 0.33f, -0.33f, 0.33f},
+	{-1.0f,  1.0f, -1.0f, 0xffff0000, -0.33f, 0.33f, -0.33f},
+	{ 1.0f,  1.0f, -1.0f, 0xffff00ff, 0.33f, 0.33f, -0.33f},
+	{-1.0f, -1.0f, -1.0f, 0xffffff00, -0.33f, -0.33f, -0.33f},
+	{ 1.0f, -1.0f, -1.0f, 0xffffffff, 0.33f, -0.33f, -0.33f},
 };
 
 static const uint16_t s_cubeIndices[36] =
@@ -102,7 +108,6 @@ static bgfx::ShaderHandle loadShader(bx::FileReaderI* _reader, const char* _name
 
 bgfx::ProgramHandle BaseApplication::loadProgram(const char* _vsName, const char* _fsName)
 {
-
 	bgfx::ShaderHandle vsh = loadShader(m_reader, _vsName);
 	bgfx::ShaderHandle fsh = BGFX_INVALID_HANDLE;
 	if (NULL != _fsName)
@@ -132,6 +137,7 @@ BaseApplication::~BaseApplication()
 
 void BaseApplication::run()
 {
+
 	//do everything in a single thread for now
 	//because multithreading is hard and setting up everything in the
 	//bgfx examples is complicated

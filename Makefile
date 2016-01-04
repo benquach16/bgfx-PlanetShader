@@ -18,7 +18,7 @@ BGFX_ALL=$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src/*.o
 LDFLAGS += $(LIBRARIES)
 LDFLAGS += -static 
 
-all: baseapplication.o
+all: baseapplication.o makeshaders
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL)  baseapplication.o main.cpp -o renderer
 
 baseapplication.o: baseapplication.h baseapplication.cpp
