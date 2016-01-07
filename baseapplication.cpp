@@ -1,3 +1,4 @@
+#include <iostream>
 #include "baseapplication.h"
 
 
@@ -23,6 +24,7 @@ struct PosColorVertex
 				.add(bgfx::Attrib::Normal,   3, bgfx::AttribType::Float)
 				.end();
 		};
+
 	static bgfx::VertexDecl ms_decl;
 };
 bgfx::VertexDecl PosColorVertex::ms_decl;
@@ -108,6 +110,7 @@ static bgfx::ShaderHandle loadShader(bx::FileReaderI* _reader, const char* _name
 
 bgfx::ProgramHandle BaseApplication::loadProgram(const char* _vsName, const char* _fsName)
 {
+	
 	bgfx::ShaderHandle vsh = loadShader(m_reader, _vsName);
 	bgfx::ShaderHandle fsh = BGFX_INVALID_HANDLE;
 	if (NULL != _fsName)
@@ -171,37 +174,24 @@ void BaseApplication::run()
 	bool exit = false;
 	SDL_Event event;
 
-	PosColorVertex::init();
-	bgfx::VertexBufferHandle m_vbh = bgfx::createVertexBuffer(
-		// Static data can be passed with bgfx::makeRef
-		bgfx::makeRef(s_cubeVertices, sizeof(s_cubeVertices) )
-		, PosColorVertex::ms_decl
-		);
-
-	// Create static index buffer.
-	bgfx::IndexBufferHandle m_ibh = bgfx::createIndexBuffer(
-		// Static data can be passed with bgfx::makeRef
-		bgfx::makeRef(s_cubeIndices, sizeof(s_cubeIndices) )
-		);
-
 
 	bgfx::ProgramHandle program = loadProgram("vs", "fs");
+
+	Mesh *mesh = meshLoad("sphere.bin");
+	float t = 0;
 	while (!exit)
 	{
 		// Set view 0 default viewport.
 		bgfx::setViewRect(0, 0, 0, m_width, m_height);
-
 
 		// Use debug font to print information about this example.
 		bgfx::dbgTextClear();
 		bgfx::dbgTextPrintf(0, 1, 0x4f, "test");
 		bgfx::dbgTextPrintf(0, 2, 0x6f, "Description: Initialization and debug text.");
 
-
-
 		
 		float at[3]  = { 0.0f, 0.0f,  0.0f };
-		float eye[3] = { 0.0f, 0.0f, -10.0f };
+		float eye[3] = { 0.0f, 0.0f, -4.0f };
 
 		float view[16];
 		bx::mtxLookAt(view, eye, at);
@@ -216,20 +206,10 @@ void BaseApplication::run()
 
 		bgfx::touch(0);
 		float mtx[16];
-		bx::mtxRotateXY(mtx, 20, 70);
-		mtx[14] = 0.0f;
+		bx::mtxRotateXY(mtx, 0, t);
+		t+=0.01f;
 
-		// Set model matrix for rendering.
-		bgfx::setTransform(mtx);
-		// Set vertex and index buffer.
-		bgfx::setVertexBuffer(m_vbh);
-		bgfx::setIndexBuffer(m_ibh);
-
-		// Set render states.
-		bgfx::setState(BGFX_STATE_DEFAULT);
-
-		// Submit primitive for rendering to view 0.
-		bgfx::submit(0,program);
+		meshSubmit(mesh, 0, program, mtx);
 
 		// Advance to next frame. Rendering thread will be kicked to
 		// process submitted rendering primitives.
@@ -249,7 +229,7 @@ void BaseApplication::run()
 
 
 	}
-
+	delete mesh;
 	bgfx::destroyProgram(program);
 
 }
