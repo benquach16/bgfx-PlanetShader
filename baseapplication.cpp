@@ -206,8 +206,8 @@ void BaseApplication::run()
 
 		bgfx::touch(0);
 		float mtx[16];
-		bx::mtxRotateXY(mtx, 0, t);
-		t+=0.01f;
+		bx::mtxRotateXY(mtx, 0, 180);
+		//t+=0.01f;
 
 		meshSubmit(mesh, 0, program, mtx);
 

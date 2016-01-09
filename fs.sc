@@ -1,51 +1,41 @@
-$input v_color0, v_view0, v_constant
+$input v_pos, v_view, v_normal, v_color0
 
-/*
- * Copyright 2011-2015 Branimir Karadzic. All rights reserved.
- * License: http://www.opensource.org/licenses/BSD-2-Clause
- */
 
 #include "./common/common.sh"
 
 
-// scatter const
-const float K_R = 0.166;
-const float K_M = 0.0025;
-const float E = 14.3; // light intensity
-const vec3  C_R = vec3( 0.3, 0.7, 1.0 ); // 1 / wavelength ^ 4
-const float G_M = -0.85;// Mie g
-
-const float R = 1.0;
-const float R_INNER = 0.7;
-const float SCALE_H = 4.0 / ( R - R_INNER );
-const float SCALE_L = 1.0 / ( R - R_INNER );
-
-const int NUM_OUT_SCATTER = 10;
-const float FNUM_OUT_SCATTER = 10.0;
-
-const int NUM_IN_SCATTER = 10;
-const float FNUM_IN_SCATTER = 10.0;
-
-float phase_reyleigh( float cc )
+vec2 blinn(vec3 _lightDir, vec3 _normal, vec3 _viewDir)
 {
-	return 0.75 * ( 1.0 + cc );
+	float ndotl = dot(_normal, _lightDir);
+	vec3 reflected = _lightDir - 2.0*ndotl*_normal; // reflect(_lightDir, _normal);
+	float rdotv = dot(reflected, _viewDir);
+	return vec2(ndotl, rdotv);
 }
 
-float density( vec3 p )
+float fresnel(float _ndotl, float _bias, float _pow)
 {
-	return exp( -( length( p ) - R_INNER ) * SCALE_H );
+	float facing = (1.0 - _ndotl);
+	return max(_bias + (1.0 - _bias) * pow(facing, _pow), 0.0);
 }
 
-
+vec4 lit(float _ndotl, float _rdotv, float _m)
+{
+	float diff = max(0.0, _ndotl);
+	float spec = step(0.0, _ndotl) * max(0.0, _rdotv * _m);
+	return vec4(1.0, diff, spec, 1.0);
+}
 
 void main()
 {
-	//create light vector here
-	vec3 lightPos = vec3(0.0,0.0,0.0);
-	vec4 col = vec4(1.0,1.0,1.0,1.0);
-	vec4 col2 = vec4(0.0, 0.0, 0.0, 0.0);
+	vec3 lightDir = vec3(0.0, 0.0, -1.0);
+	vec3 normal = normalize(v_normal);
+	vec3 view = normalize(v_view);
+	vec2 bln = blinn(lightDir, normal, view);
+	vec4 lc = lit(bln.x, bln.y, 1.0);
+	float fres = fresnel(bln.x, 0.2, 9.0);
 
-  	vec3 sunlight = vec3(10.0, 0.0, 0.0);
-	gl_FragColor = mix(col2, col, v_constant);
-	
+	vec3 color = vec3(0.3, 0.5, 0.3);
+	gl_FragColor.xyz = pow(vec3(0.07, 0.06, 0.08) + color*lc.y + fres*vec3(0.01,0.02,0.1), vec3_splat(1.0/2.2) );
+	gl_FragColor.w = 1.0;
 }
+
