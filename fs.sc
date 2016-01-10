@@ -14,22 +14,19 @@ float fresnel(float dotProduct, float bias, float power)
 void main()
 {
 	vec3 normal = normalize(v_normal);
-	vec3 viewPosition = normalize(v_pos);
+	vec3 viewPosition = normalize(v_view);
+	vec3 vertexPosition = v_pos;
 	vec3 lightPosition = vec3(0.0, 0.0, -5.0);
-	vec3 lightDirection = normalize(lightPosition - viewPosition);
-	vec3 R = normalize(-reflect(lightDirection, normal));
+	vec3 lightDirection = normalize(lightPosition - vertexPosition);
+	vec3 viewDirection = normalize(viewPosition - vertexPosition);
 
 	
 	vec4 col = vec4(0.5,1.0, 0.5, 1.0);
 	vec4 ambient = vec4(0.01,0.01,0.01,1.0);
 	col = col * max(dot(normal, lightDirection), 0.0);
 
-	
-	col = clamp(col, 0.0, 1.0);
+	float rim = 1.0 - dot(viewDirection, normal);
 
-	float dotProduct = dot(viewPosition, normal);
-	float fresnel = fresnel(dotProduct, 0.2, 9.0);
-	vec4 fresCol = fresnel*vec4(0.01,0.02,0.1, 1.0);
-	gl_FragColor = ambient + col + fresCol;
+	gl_FragColor = ambient + col + pow(rim, 5.0) * vec4(1.0,0.01,0.1,1.0);
 
 }
