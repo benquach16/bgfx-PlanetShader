@@ -27,6 +27,6 @@ void main()
 
 	float rim = 1.0 - dot(viewDirection, normal);
 
-	gl_FragColor = ambient + col + pow(rim, 5.0) * vec4(1.0,0.01,0.1,1.0);
+	gl_FragColor = ambient + col + pow(rim, 5.0) * vec4(0.1,0.5,1.0,1.0);
 
 }
