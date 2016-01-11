@@ -79,6 +79,7 @@ protected:
 	bgfx::VertexDecl m_decl;
 	typedef std::vector<Group> GroupArray;
 	GroupArray m_groups;
+	float mtx[16];
 };
 
 Mesh* meshLoad(bx::ReaderSeekerI* _reader);

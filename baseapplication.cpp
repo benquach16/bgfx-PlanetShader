@@ -114,14 +114,20 @@ void BaseApplication::run()
 					   , 1.0f
 					   , 0);
 
+
 	
 	bool exit = false;
 	SDL_Event event;
 
-
-	bgfx::ProgramHandle program = loadProgram("vs", "fs");
+	bgfx::ProgramHandle planet_program = loadProgram("vs", "fs");
+	bgfx::ProgramHandle atmo_program = loadProgram("vs_atmo", "fs_atmo");
 
 	Mesh *mesh = meshLoad("sphere.bin");
+	Mesh *atmo = meshLoad("sphere.bin");
+	bgfx::setState(0
+				   | BGFX_STATE_RGB_WRITE
+				   | BGFX_STATE_BLEND_FUNC(BGFX_STATE_BLEND_SRC_ALPHA, BGFX_STATE_BLEND_INV_SRC_ALPHA)
+		);
 	float t = 0;
 	while (!exit)
 	{
@@ -149,11 +155,21 @@ void BaseApplication::run()
 
 
 		bgfx::touch(0);
+
+		//transform for planet
 		float mtx[16];
 		bx::mtxRotateXY(mtx, 0, t);
+		bx::mtxTranslate(mtx, -1,0,0);
+		bx::mtxScale(mtx, 1.5, 1.5, 1.5);
 		t+=0.01f;
 
-		mesh->submit(0, program, mtx);
+		float atmoMtx[16];
+		bx::mtxTranslate(atmoMtx, 1,0,0);
+
+		//transform for atmosphere
+
+		mesh->submit(0, atmo_program, mtx);
+		atmo->submit(0, planet_program, atmoMtx);
 		//meshSubmit(mesh, 0, program, mtx);
 		// Advance to next frame. Rendering thread will be kicked to
 		// process submitted rendering primitives.
@@ -174,6 +190,7 @@ void BaseApplication::run()
 
 	}
 	delete mesh;
-	bgfx::destroyProgram(program);
-
+	delete atmo;
+	bgfx::destroyProgram(planet_program);
+	bgfx::destroyProgram(atmo_program);
 }

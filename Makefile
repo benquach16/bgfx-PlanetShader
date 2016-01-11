@@ -12,7 +12,7 @@ USERCXXFLAGS= -g -std=c++14
 
 #make sure we have XLIB and SDL2 packages first!!!
 #if you do not please use your package manager to install them
-LIBS= -lrt -ldl -lX11 -lGL -lpthread -lSDL2
+LIBS= -lrt -ldl -lX11 -lGL -lGLU -lpthread -lSDL2 
 #linking each file cause there are dx11 references
 BGFX_ALL=$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src/*.o
 LDFLAGS += $(LIBRARIES)
@@ -32,11 +32,13 @@ mesh.o: engine/mesh.h engine/mesh.cpp
 
 makeshaders: makeshadervert makeshaderfrag
 
-makeshadervert: vs.sc
-	$(SHADERC) -f vs.sc -o shaders/glsl/vs.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose 
+makeshadervert: vs.sc vs_atmo.sc
+	$(SHADERC) -f vs.sc -o shaders/glsl/vs.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
+	$(SHADERC) -f vs_atmo.sc -o shaders/glsl/vs_atmo.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
 
 makeshaderfrag: fs.sc
-	$(SHADERC) -f fs.sc -o shaders/glsl/fs.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose 
+	$(SHADERC) -f fs.sc -o shaders/glsl/fs.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose
+	$(SHADERC) -f fs_atmo.sc -o shaders/glsl/fs_atmo.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose 
 
 clean:
 	rm *.o renderer
