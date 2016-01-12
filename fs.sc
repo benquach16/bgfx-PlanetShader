@@ -28,6 +28,6 @@ void main()
 	vec3 R = lightDirection - 2.0*specDot*normal;
 	float viewDot = dot(R, viewDirection);
 	
-	gl_FragColor = ambient + col + pow(rim, 6.0) * vec4(0.1,0.5,1.0,1.0);
+	gl_FragColor = ambient + col + pow(rim, 8.0) * vec4(0.3,0.6,1.0,1.0);
 
 }
