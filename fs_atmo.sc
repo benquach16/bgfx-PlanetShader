@@ -15,8 +15,8 @@ const float E = 14.3; // light intensity
 const vec3  C_R = vec3( 0.3, 0.7, 1.0 ); // 1 / wavelength ^ 4
 const float G_M = -0.85;// Mie g
 
-const float R = 1.0;
-const float R_INNER = 0.8;
+const float R = 0.8;
+const float R_INNER = 0.7;
 const float SCALE_H = 4.0 / ( R - R_INNER );
 const float SCALE_L = 1.0 / ( R - R_INNER );
 
@@ -122,9 +122,10 @@ void main()
 	vec3 l = vec3( 0, 0, -1 );
 
 	vec2 e = ray_vs_sphere( eye, dir, R );
+	
 	if ( e.x > e.y ) {
 		discard;
-	}
+	}	
 
 
 	vec2 f = ray_vs_sphere( eye, dir, R_INNER );
@@ -133,5 +134,6 @@ void main()
 	vec3 I = in_scatter( eye, dir, e, l );
 	
 	gl_FragColor = vec4( I, 1.0 );
-	
+	if(I == vec3(0.0,0.0,0.0))
+		discard;
 }

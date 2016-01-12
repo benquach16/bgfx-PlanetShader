@@ -7,19 +7,17 @@
 
 
 #include <stdio.h>
-#include <bx/thread.h>
 #include <bx/handlealloc.h>
 #include <bx/fpumath.h>
 #include <bx/readerwriter.h>
 #include <bx/string.h>
 
-#include <tinystl/allocator.h>
-#include <tinystl/string.h>
 
 #include <bgfx/bgfx.h>
 #include <bx/uint32_t.h>
 
 #include "engine/mesh.h"
+#include "programloader.h"
 
 class BaseApplication
 {
@@ -34,7 +32,8 @@ protected:
 	SDL_Window *m_mainWindow;
 	int m_width;
 	int m_height;
-	bx::CrtFileReader *m_reader;
+
+	ProgramLoader m_programloader;
 };
 
 

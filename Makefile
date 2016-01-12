@@ -18,17 +18,21 @@ BGFX_ALL=$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src/*.o
 LDFLAGS += $(LIBRARIES)
 LDFLAGS += -static 
 
-all: baseapplication.o mesh.o makeshaders indexbufferdecompression.o
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL)  baseapplication.o mesh.o indexbufferdecompression.o main.cpp -o renderer
+all: baseapplication.o programloader.o mesh.o makeshaders indexbufferdecompression.o
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o mesh.o indexbufferdecompression.o main.cpp -o renderer
 
-baseapplication.o: baseapplication.h baseapplication.cpp
+baseapplication.o: baseapplication.h baseapplication.cpp 
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c
+
+programloader.o: programloader.h programloader.cpp
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.cpp -c
 
 indexbufferdecompression.o: engine/indexbufferdecompression.h engine/indexbufferdecompression.cpp
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/indexbufferdecompression.cpp -c
 
 mesh.o: engine/mesh.h engine/mesh.cpp
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/mesh.cpp -c
+
 
 makeshaders: makeshadervert makeshaderfrag
 
