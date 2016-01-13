@@ -162,10 +162,10 @@ Mesh* meshLoad(bx::ReaderSeekerI* _reader)
 Mesh* meshLoad(const char* _filePath)
 {
 
-	bx::FileReaderI* reader = new bx::CrtFileReader;
-	bx::open(reader, _filePath);
-	Mesh* mesh = meshLoad(reader);
-	bx::close(reader);
+	bx::CrtFileReader reader;
+	bx::open(&reader, _filePath);
+	Mesh* mesh = meshLoad(&reader);
+	bx::close(&reader);
 	return mesh;
 }
 

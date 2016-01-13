@@ -1,21 +1,6 @@
 #include "programloader.h"
 
 
-const bgfx::Memory* ProgramLoader::loadMem(bx::FileReaderI* _reader, const char* _filePath)
-{
-	if (0 == bx::open(_reader, _filePath) )
-	{
-		uint32_t size = (uint32_t)bx::getSize(_reader);
-		const bgfx::Memory* mem = bgfx::alloc(size+1);
-		bx::read(_reader, mem->data, size);
-		bx::close(_reader);
-		mem->data[mem->size-1] = '\0';
-		return mem;
-	}
-
-	return NULL;
-}
-
 bgfx::ShaderHandle ProgramLoader::loadShader(bx::FileReaderI* _reader, const char* _name)
 {
 	char filePath[512];

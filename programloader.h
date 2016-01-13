@@ -16,12 +16,12 @@
 #include <bgfx/bgfx.h>
 #include <bx/uint32_t.h>
 
+#include "engine/memory.h"
+
 
 class ProgramLoader
 {
 public:
-
-	const bgfx::Memory* loadMem(bx::FileReaderI* reader, const char* filePath);
 	bgfx::ShaderHandle loadShader(bx::FileReaderI* reader, const char* name);
 	bgfx::ProgramHandle loadProgram(const char* vsName, const char* fsName);
 protected:

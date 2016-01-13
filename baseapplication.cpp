@@ -58,6 +58,7 @@ void BaseApplication::run()
 	Mesh *atmo = meshLoad("sphere.bin");
 
 
+	bgfx::UniformHandle skybox = bgfx::createUniform("skybox", bgfx::UniformType::Int1);
 
 	float t = 0;
 	while (!exit)
@@ -67,7 +68,7 @@ void BaseApplication::run()
 
 		// Use debug font to print information about this example.
 		bgfx::dbgTextClear();
-		bgfx::dbgTextPrintf(0, 1, 0x4f, "test");
+		bgfx::dbgTextPrintf(0, 1, 0x4f, "Planet");
 		bgfx::dbgTextPrintf(0, 2, 0x6f, "Description: Initialization and debug text.");
 
 		
@@ -105,8 +106,8 @@ void BaseApplication::run()
 			| BGFX_STATE_BLEND_ALPHA
 			| BGFX_STATE_CULL_CCW
 			| BGFX_STATE_MSAA;
-		mesh->submit(0, atmo_program, atmoMtx, state);
-		atmo->submit(0, planet_program, mtx, state);
+		mesh->submit(0, planet_program, mtx, state);
+		atmo->submit(0, atmo_program, atmoMtx, state);
 
 		// Advance to next frame. Rendering thread will be kicked to
 		// process submitted rendering primitives.
@@ -120,6 +121,20 @@ void BaseApplication::run()
 			{
 				exit=true;
 				break;
+			}
+			case SDL_WINDOWEVENT:
+			{
+				//needed to resize the rendering window
+				/*
+				if(event.window.event == SDL_WINDOWEVENT_RESIZED)
+				{
+					m_width = event.window.data1;
+					m_height = event.window.data2;
+					uint32_t reset = BGFX_RESET_VSYNC;
+
+					bgfx::reset(m_width, m_height, reset);
+				}
+				*/
 			}
 			}
 		}

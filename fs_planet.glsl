@@ -16,7 +16,7 @@ void main()
 	//viewDirection = normalize(viewDirection - vertexPosition);
 
 	//apply lamberts cosine law
-	vec4 col = vec4(0.5,1.0, 0.5, 1.0);
+	vec4 col = vec4(0.1,0.7, 0.2, 1.0);
 	vec4 ambient = vec4(0.01,0.01,0.01,1.0);
 	col = col * max(dot(normal, lightDirection), 0.0);
 

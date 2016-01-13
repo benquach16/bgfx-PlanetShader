@@ -9,8 +9,8 @@
 #include <bx/string.h>
 #include <vector>
 #include <string>
-#include "readbitstream.h"
-#include "indexbufferdecompression.h"
+#include "../libraries/ib-compress/readbitstream.h"
+#include "../libraries/ib-compress/indexbufferdecompression.h"
 
 
 
@@ -79,6 +79,7 @@ protected:
 	bgfx::VertexDecl m_decl;
 	typedef std::vector<Group> GroupArray;
 	GroupArray m_groups;
+	//use this eventually for OOP
 	float m_mtx[16];
 };
 

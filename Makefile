@@ -20,8 +20,8 @@ BGFX_ALL=$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src/*.o
 LDFLAGS += $(LIBRARIES)
 LDFLAGS += -static 
 
-all: baseapplication.o programloader.o mesh.o makeshaders indexbufferdecompression.o
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o mesh.o indexbufferdecompression.o main.cpp -o renderer
+all: baseapplication.o programloader.o mesh.o texture.o memory.o makeshaders indexbufferdecompression.o stb_image.o
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o memory.o texture.o mesh.o indexbufferdecompression.o stb_image.o main.cpp -o renderer
 
 baseapplication.o: baseapplication.h baseapplication.cpp 
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c
@@ -29,11 +29,20 @@ baseapplication.o: baseapplication.h baseapplication.cpp
 programloader.o: programloader.h programloader.cpp
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.cpp -c
 
-indexbufferdecompression.o: engine/indexbufferdecompression.h engine/indexbufferdecompression.cpp
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/indexbufferdecompression.cpp -c
+stb_image.o: libraries/stb/stb_image.c
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) libraries/stb/stb_image.c -c
+
+indexbufferdecompression.o: libraries/ib-compress/indexbufferdecompression.h libraries/ib-compress/indexbufferdecompression.cpp
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) libraries/ib-compress/indexbufferdecompression.cpp -c
+
+memory.o: engine/memory.h engine/memory.cpp
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/memory.cpp -c
 
 mesh.o: engine/mesh.h engine/mesh.cpp
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/mesh.cpp -c
+
+texture.o: engine/texture.h engine/texture.cpp
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/texture.cpp -c
 
 
 makeshaders: makeshadervert makeshaderfrag
