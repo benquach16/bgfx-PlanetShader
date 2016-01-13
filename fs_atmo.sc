@@ -66,8 +66,7 @@ float phase_reyleigh(float cc)
 {
 	return 0.75*(1.0 + cc);
 }
-vec3 lightPosition = vec3(0.0, 0.0, -5.0);
-vec3 eye = vec3(0.0, 0.0, -4.0);
+
 
 float density( vec3 p ){
 	return exp( -( length( p ) - R_INNER ) * SCALE_H );
@@ -75,6 +74,7 @@ float density( vec3 p ){
 
 float optic( vec3 p, vec3 q ) {
 	vec3 step = ( q - p ) / FNUM_OUT_SCATTER;
+
 	vec3 v = p + step * 0.5;
 
 	float sum = 0.0;
@@ -112,14 +112,15 @@ vec3 in_scatter( vec3 o, vec3 dir, vec2 e, vec3 l ) {
 	return sum * ( K_R * C_R * phase_reyleigh( cc ) + K_M * phase_mie( G_M, c, cc ) ) * E;
 }
 
-
+vec3 lightPosition = vec3(0.0, 0.0, -5.0);
+vec3 eye = vec3(0.0, 0.0, -4.0);
 void main()
 {
 	vec2 iResolution = vec2(1280,800);
 	vec3 dir = ray_dir( 45.0, iResolution.xy, gl_FragCoord.xy );
 
 	// sun light dir
-	vec3 l = vec3( 0, 0, -1 );
+	vec3 l = vec3( 0, 0, 1 );
 
 	vec2 e = ray_vs_sphere( eye, dir, R );
 	
@@ -132,8 +133,7 @@ void main()
 	e.y = min( e.y, f.x );
 
 	vec3 I = in_scatter( eye, dir, e, l );
+	float avg = (I.x + I.y + I.z)/3;
+	gl_FragColor = vec4( I, avg );
 	
-	gl_FragColor = vec4( I, 1.0 );
-	if(I == vec3(0.0,0.0,0.0))
-		discard;
 }

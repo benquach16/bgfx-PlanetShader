@@ -12,6 +12,7 @@
 #include <bx/readerwriter.h>
 #include <bx/string.h>
 
+#include <GL/gl.h>
 
 #include <bgfx/bgfx.h>
 #include <bx/uint32_t.h>
