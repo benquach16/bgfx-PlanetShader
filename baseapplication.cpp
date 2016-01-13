@@ -52,7 +52,7 @@ void BaseApplication::run()
 	bool exit = false;
 	SDL_Event event;
 
-	bgfx::ProgramHandle planet_program = m_programloader.loadProgram("vs", "fs");
+	bgfx::ProgramHandle planet_program = m_programloader.loadProgram("vs_planet", "fs_planet");
 	bgfx::ProgramHandle atmo_program = m_programloader.loadProgram("vs_atmo", "fs_atmo");
 	Mesh *mesh = meshLoad("sphere.bin");
 	Mesh *atmo = meshLoad("sphere.bin");
@@ -72,7 +72,7 @@ void BaseApplication::run()
 
 		
 		float at[3]  = { 0.0f, 0.0f,  0.0f };
-		float eye[3] = { 0.0f, 0.0f, -4.0f };
+		float eye[3] = { 0.0f, 0.0f, -5.0f };
 
 		float view[16];
 		bx::mtxLookAt(view, eye, at);
@@ -90,12 +90,12 @@ void BaseApplication::run()
 		//transform for planet
 		float mtx[16];
 		bx::mtxRotateXY(mtx, 0, t);
-
+		bx::mtxScale(mtx, 1.6, 1.6, 1.6);
 		t+=0.01f;
 
 		float atmoMtx[16];
 		//bx::mtxTranslate(atmoMtx, -1,0,0);
-		bx::mtxScale(atmoMtx, 1.5, 1.5, 1.5);
+		bx::mtxScale(atmoMtx, 3, 3, 3);
 		//transform for atmosphere
 		uint64_t state = 0 
 			| BGFX_STATE_RGB_WRITE 

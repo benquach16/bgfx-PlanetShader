@@ -38,13 +38,13 @@ mesh.o: engine/mesh.h engine/mesh.cpp
 
 makeshaders: makeshadervert makeshaderfrag
 
-makeshadervert: vs.sc vs_atmo.sc
-	$(SHADERC) -f vs.sc -o shaders/glsl/vs.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
-	$(SHADERC) -f vs_atmo.sc -o shaders/glsl/vs_atmo.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
+makeshadervert: vs_planet.glsl vs_atmo.glsl
+	$(SHADERC) -f vs_planet.glsl -o shaders/glsl/vs_planet.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
+	$(SHADERC) -f vs_atmo.glsl -o shaders/glsl/vs_atmo.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
 
-makeshaderfrag: fs.sc
-	$(SHADERC) -f fs.sc -o shaders/glsl/fs.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose
-	$(SHADERC) -f fs_atmo.sc -o shaders/glsl/fs_atmo.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose 
+makeshaderfrag: fs_planet.glsl fs_atmo.glsl
+	$(SHADERC) -f fs_planet.glsl -o shaders/glsl/fs_planet.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose
+	$(SHADERC) -f fs_atmo.glsl -o shaders/glsl/fs_atmo.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose 
 
 clean:
 	rm *.o renderer

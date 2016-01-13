@@ -11,12 +11,12 @@ const float MAX = 10000.0;
 // scatter const
 const float K_R = 0.166;
 const float K_M = 0.0025;
-const float E = 14.3; // light intensity
+const float E = 15.3; // light intensity
 const vec3  C_R = vec3( 0.3, 0.7, 1.0 ); // 1 / wavelength ^ 4
 const float G_M = -0.85;// Mie g
 
-const float R = 0.8;
-const float R_INNER = 0.7;
+const float R = 1.0;
+const float R_INNER = 0.95;
 const float SCALE_H = 4.0 / ( R - R_INNER );
 const float SCALE_L = 1.0 / ( R - R_INNER );
 
@@ -120,7 +120,7 @@ void main()
 	vec3 dir = ray_dir( 45.0, iResolution.xy, gl_FragCoord.xy );
 
 	// sun light dir
-	vec3 l = vec3( 0, 0, 1 );
+	vec3 l = vec3( 0, 0, 1.0 );
 
 	vec2 e = ray_vs_sphere( eye, dir, R );
 	
@@ -137,6 +137,6 @@ void main()
 	
 	float avg = (I.x + I.y + I.z)/3;
 	I += 0.4;
-	gl_FragColor = vec4( I, avg/1.1 );
+	gl_FragColor = vec4( I, avg );
 	
 }
