@@ -32,7 +32,7 @@ void BaseApplication::run()
 									, m_height
 									, SDL_WINDOW_SHOWN
 									| SDL_WINDOW_RESIZABLE);
-								  
+
 	bgfx::sdlSetWindow(m_mainWindow);
 	bgfx::renderFrame();
 	bgfx::init( bgfx::RendererType::OpenGL);
@@ -97,16 +97,17 @@ void BaseApplication::run()
 		//bx::mtxTranslate(atmoMtx, -1,0,0);
 		bx::mtxScale(atmoMtx, 1.5, 1.5, 1.5);
 		//transform for atmosphere
-		uint64_t state = 0
-			| BGFX_STATE_RGB_WRITE
-			| BGFX_STATE_ALPHA_WRITE
-			| BGFX_STATE_DEPTH_WRITE
-			| BGFX_STATE_DEPTH_TEST_LESS
-			| BGFX_STATE_MSAA
-			| BGFX_STATE_BLEND_ALPHA;
+		uint64_t state = 0 
+			| BGFX_STATE_RGB_WRITE 
+			| BGFX_STATE_ALPHA_WRITE 
+			| BGFX_STATE_DEPTH_TEST_LESS 
+			| BGFX_STATE_DEPTH_WRITE 
+			| BGFX_STATE_BLEND_ALPHA
+			| BGFX_STATE_CULL_CCW
+			| BGFX_STATE_MSAA;
 		mesh->submit(0, atmo_program, atmoMtx, state);
 		atmo->submit(0, planet_program, mtx, state);
-		//meshSubmit(mesh, 0, program, mtx);
+
 		// Advance to next frame. Rendering thread will be kicked to
 		// process submitted rendering primitives.
 		bgfx::frame();

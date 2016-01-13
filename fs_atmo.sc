@@ -133,7 +133,10 @@ void main()
 	e.y = min( e.y, f.x );
 
 	vec3 I = in_scatter( eye, dir, e, l );
+	
+	
 	float avg = (I.x + I.y + I.z)/3;
-	gl_FragColor = vec4( I, avg );
+	I += 0.4;
+	gl_FragColor = vec4( I, avg/1.1 );
 	
 }
