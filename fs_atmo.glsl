@@ -11,7 +11,7 @@ const float MAX = 10000.0;
 // scatter const
 const float K_R = 0.166;
 const float K_M = 0.0025;
-const float E = 15.3; // light intensity
+const float E = 12.3; // light intensity
 const vec3  C_R = vec3( 0.3, 0.7, 1.0 ); // 1 / wavelength ^ 4
 const float G_M = -0.85;// Mie g
 
@@ -20,11 +20,11 @@ const float R_INNER = 0.94;
 const float SCALE_H = 4.0 / ( R - R_INNER );
 const float SCALE_L = 1.0 / ( R - R_INNER );
 
-const int NUM_OUT_SCATTER = 10;
-const float FNUM_OUT_SCATTER = 10.0;
+const int NUM_OUT_SCATTER = 20;
+const float FNUM_OUT_SCATTER = 20.0;
 
-const int NUM_IN_SCATTER = 10;
-const float FNUM_IN_SCATTER = 10.0;
+const int NUM_IN_SCATTER = 20;
+const float FNUM_IN_SCATTER = 20.0;
 
 	
 // ray direction
