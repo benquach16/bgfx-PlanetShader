@@ -20,8 +20,8 @@ BGFX_ALL=$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src/*.o
 LDFLAGS += $(LIBRARIES)
 LDFLAGS += -static 
 
-all: baseapplication.o programloader.o mesh.o texture.o memory.o makeshaders indexbufferdecompression.o stb_image.o
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o memory.o texture.o mesh.o indexbufferdecompression.o stb_image.o main.cpp -o renderer
+all: baseapplication.o programloader.o mesh.o texture.o memory.o makeshaders indexbufferdecompression.o 
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o memory.o texture.o mesh.o indexbufferdecompression.o main.cpp -o renderer
 
 baseapplication.o: baseapplication.h baseapplication.cpp 
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c
@@ -47,13 +47,15 @@ texture.o: engine/texture.h engine/texture.cpp
 
 makeshaders: makeshadervert makeshaderfrag
 
-makeshadervert: vs_planet.glsl vs_atmo.glsl
+makeshadervert: vs_planet.glsl vs_atmo.glsl vs_skybox.glsl
 	$(SHADERC) -f vs_planet.glsl -o shaders/glsl/vs_planet.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
 	$(SHADERC) -f vs_atmo.glsl -o shaders/glsl/vs_atmo.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
+	$(SHADERC) -f vs_skybox.glsl -o shaders/glsl/vs_skybox.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose	
 
 makeshaderfrag: fs_planet.glsl fs_atmo.glsl
 	$(SHADERC) -f fs_planet.glsl -o shaders/glsl/fs_planet.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose
-	$(SHADERC) -f fs_atmo.glsl -o shaders/glsl/fs_atmo.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose 
+	$(SHADERC) -f fs_atmo.glsl -o shaders/glsl/fs_atmo.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose
+	$(SHADERC) -f fs_skybox.glsl -o shaders/glsl/fs_skybox.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose
 
 clean:
 	rm *.o renderer

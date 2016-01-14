@@ -16,7 +16,7 @@ const vec3  C_R = vec3( 0.3, 0.7, 1.0 ); // 1 / wavelength ^ 4
 const float G_M = -0.85;// Mie g
 
 const float R = 1.0;
-const float R_INNER = 0.95;
+const float R_INNER = 0.94;
 const float SCALE_H = 4.0 / ( R - R_INNER );
 const float SCALE_L = 1.0 / ( R - R_INNER );
 
@@ -75,6 +75,7 @@ float density( vec3 p ){
 float optic( vec3 p, vec3 q ) {
 	vec3 step = ( q - p ) / FNUM_OUT_SCATTER;
 
+
 	vec3 v = p + step * 0.5;
 
 	float sum = 0.0;
@@ -112,7 +113,7 @@ vec3 in_scatter( vec3 o, vec3 dir, vec2 e, vec3 l ) {
 	return sum * ( K_R * C_R * phase_reyleigh( cc ) + K_M * phase_mie( G_M, c, cc ) ) * E;
 }
 
-vec3 lightPosition = vec3(0.0, 0.0, -5.0);
+vec3 lightPosition = vec3(-5.0, 5.0, -5.0);
 vec3 eye = vec3(0.0, 0.0, -4.0);
 void main()
 {
@@ -120,7 +121,7 @@ void main()
 	vec3 dir = ray_dir( 45.0, iResolution.xy, gl_FragCoord.xy );
 
 	// sun light dir
-	vec3 l = vec3( 0, 0, 1.0 );
+	vec3 l = normalize(v_pos - lightPosition);
 
 	vec2 e = ray_vs_sphere( eye, dir, R );
 	

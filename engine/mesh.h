@@ -12,8 +12,6 @@
 #include "../libraries/ib-compress/readbitstream.h"
 #include "../libraries/ib-compress/indexbufferdecompression.h"
 
-
-
 struct Aabb
 {
 	float m_min[3];

@@ -35,8 +35,8 @@ void main()
 	//speculards
 	vec3 reflectVec = normalize(-reflect(lightDirection, normal));
 	float spec = 0.5* pow(max(dot(reflectVec, viewDirection), 0.0), 5.0);
-	
-	gl_FragColor = ambient + col+ spec + f_rim * vec4(0.3,0.6,1.0,1.0);
-	//gl_FragColor = texture2D(s_planet_texture, v_texcoord0.xy);
+	vec4 tex = texture2D(s_planet_texture, v_texcoord0.xy);
+	gl_FragColor = ambient + tex+ spec + f_rim * vec4(0.3,0.6,1.0,1.0);
+	//ogl_FragColor = texture2D(s_planet_texture, v_texcoord0.xy);
 	gl_FragColor.w = 1.0;
 }

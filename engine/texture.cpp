@@ -1,6 +1,10 @@
 #include "texture.h"
+#define STB_IMAGE_IMPLEMENTATION
+#include "../libraries/stb/stb_image.c"
+#include <iostream>
 
-
+typedef unsigned char stbi_uc;
+extern "C" stbi_uc *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp);
 
 bgfx::TextureHandle loadTexture(bx::FileReaderI* _reader, const char* _name, uint32_t _flags, uint8_t _skip, bgfx::TextureInfo* _info)
 {
@@ -40,7 +44,7 @@ bgfx::TextureHandle loadTexture(bx::FileReaderI* _reader, const char* _name, uin
 		uint8_t* img = NULL;
 		
 		img = stbi_load_from_memory( (uint8_t*)data, size, &width, &height, &comp, 4);
-
+		std::cout << "fuck" << std::endl;
 		BX_FREE(allocator, data);
 
 		if (NULL != img)
@@ -68,7 +72,7 @@ bgfx::TextureHandle loadTexture(bx::FileReaderI* _reader, const char* _name, uin
 	}
 	else
 	{
-		
+		std::cout << "FAILED" << std::endl;
 	}
 
 	return handle;
@@ -76,6 +80,6 @@ bgfx::TextureHandle loadTexture(bx::FileReaderI* _reader, const char* _name, uin
 
 bgfx::TextureHandle loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgfx::TextureInfo* _info)
 {
-	bx::CrtFileReader reader;
-	return loadTexture(&reader, _name, _flags, _skip, _info);
+	bx::CrtFileReader *reader = new bx::CrtFileReader;
+	return loadTexture(reader, _name, _flags, _skip, _info);
 }

@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
 #include <bgfx/bgfxplatform.h>
-
+#include <bgfx/bgfxdefines.h>
 
 #include <stdio.h>
 #include <bx/handlealloc.h>
@@ -18,6 +18,7 @@
 #include <bx/uint32_t.h>
 
 #include "engine/mesh.h"
+#include "engine/texture.h"
 #include "programloader.h"
 
 class BaseApplication

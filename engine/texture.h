@@ -6,10 +6,9 @@
 #include <bx/string.h>
 
 #include "memory.h"
-#define STB_IMAGE_IMPLEMENTATION
-#include "../libraries/stb/stb_image.c"
 
-bgfx::TextureHandle loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgfx::TextureInfo* _info);
+
+bgfx::TextureHandle loadTexture(const char* _name, uint32_t _flags, uint8_t _skip = 0, bgfx::TextureInfo* _info = NULL);
 
 
 

@@ -122,7 +122,7 @@ void Mesh::load(bx::ReaderSeekerI* _reader)
 }
 
 
-
+#include "texture.h"
 void Mesh::submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, uint64_t _state) const
 {
 	if (BGFX_STATE_MASK == _state)
@@ -136,7 +136,6 @@ void Mesh::submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, 
 			| BGFX_STATE_MSAA
 			;
 	}
-
 	uint32_t cached = bgfx::setTransform(_mtx);
 	for (GroupArray::const_iterator it = m_groups.begin(), itEnd = m_groups.end(); it != itEnd; ++it)
 	{
@@ -148,7 +147,6 @@ void Mesh::submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, 
 		bgfx::submit(_id, _program);
 	}
 }
-
 
 
 
