@@ -1,11 +1,14 @@
-$input v_pos, v_view, v_normal, v_color0
+$input v_pos, v_view, v_normal, v_color0, v_texcoord0
 
 
 #include "./common/common.sh"
 
 
-vec3 lightPosition = vec3(0.0, 0.0, -5.0);
-	
+vec3 lightPosition = vec3(-5.0, 5.0, -5.0);
+
+
+SAMPLER2D(s_planet_texture, 0);
+
 void main()
 {
 	vec3 normal = normalize(v_normal);
@@ -16,18 +19,24 @@ void main()
 	//viewDirection = normalize(viewDirection - vertexPosition);
 
 	//apply lamberts cosine law
-	vec4 col = vec4(0.1,0.7, 0.2, 1.0);
+	vec4 col = vec4(0.3,0.7, 0.4, 1.0);
 	vec4 ambient = vec4(0.01,0.01,0.01,1.0);
 	col = col * max(dot(normal, lightDirection), 0.0);
 
+
+	//rim shader
 	float rim = 1.0 - dot(viewDirection, normal);
-	rim += 0.2;
+	rim+=0.1;
+	//take into account light direction
+	float rimLight = dot(lightDirection, normal);
+	float f_rim = pow(rim, 8.0);
+	f_rim *= (rimLight*2);
 
-	//specular
-	float specDot = dot(normal, lightDirection);
-	vec3 R = lightDirection - 2.0*specDot*normal;
-	float viewDot = dot(R, viewDirection);
+	//speculards
+	vec3 reflectVec = normalize(-reflect(lightDirection, normal));
+	float spec = 0.5* pow(max(dot(reflectVec, viewDirection), 0.0), 5.0);
 	
-	gl_FragColor = ambient + col + pow(rim, 8.0) * vec4(0.3,0.6,1.0,1.0);
-
+	gl_FragColor = ambient + col+ spec + f_rim * vec4(0.3,0.6,1.0,1.0);
+	//gl_FragColor = texture2D(s_planet_texture, v_texcoord0.xy);
+	gl_FragColor.w = 1.0;
 }
