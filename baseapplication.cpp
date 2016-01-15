@@ -57,11 +57,13 @@ void BaseApplication::run()
 	bgfx::UniformHandle skybox = bgfx::createUniform("skybox", bgfx::UniformType::Int1);
 	
 	bgfx::UniformHandle s_planet_texture = bgfx::createUniform("s_planet_texture", bgfx::UniformType::Int1);
-
-	bgfx::TextureHandle planet_texture = loadTexture("test.bmp", 0 | BGFX_TEXTURE_U_MIRROR
+	bgfx::UniformHandle s_planet_texture_day = bgfx::createUniform("s_planet_texture_day", bgfx::UniformType::Int1);
+	bgfx::TextureHandle planet_texture = loadTexture("night_map.bmp", 0 | BGFX_TEXTURE_U_MIRROR
 											  | BGFX_TEXTURE_V_MIRROR
 											  | BGFX_TEXTURE_W_MIRROR);
-
+	bgfx::TextureHandle planet_texture_day = loadTexture("mars_map.png", 0 | BGFX_TEXTURE_U_MIRROR
+											  | BGFX_TEXTURE_V_MIRROR
+											  | BGFX_TEXTURE_W_MIRROR);
 	bgfx::setViewName(0, "skybox");
 	uint64_t state = 0
 		| BGFX_STATE_RGB_WRITE
@@ -89,7 +91,7 @@ void BaseApplication::run()
 
 		
 		float at[3]  = { 0.0f, 0.0f,  0.0f };
-		float eye[3] = { 0.0f, 0.0f, -5.0f };
+		float eye[3] = { 0.0f, 0.0f, -7.0f };
 
 		float view[16];
 		bx::mtxLookAt(view, eye, at);
@@ -106,19 +108,18 @@ void BaseApplication::run()
 		//transform for planet
 		float mtx[16];
 
-
-
-		bx::mtxScale(mtx, 1.6, 1.6, 1.6);
+		bx::mtxScale(mtx, 3, 3, 3);
 		t+=0.1f;
 		
 		//bx::mtxRotateXY(mtx, 0, t);
 		float atmoMtx[16];
-		bx::mtxScale(atmoMtx, 3, 3, 3);
+		bx::mtxScale(atmoMtx, 3.2, 3.2, 3.2);
 		//transform for atmosphere
 
 		bgfx::setTexture(0, s_planet_texture, planet_texture);
+		bgfx::setTexture(1, s_planet_texture_day, planet_texture_day);
 		mesh->submit(0, planet_program, mtx, state);
-		atmo->submit(0, atmo_program, atmoMtx, state);
+		//atmo->submit(0, atmo_program, atmoMtx, state);
 
 		// Advance to next frame. Rendering thread will be kicked to
 		// process submitted rendering primitives.
@@ -131,6 +132,11 @@ void BaseApplication::run()
 			case SDL_KEYDOWN:
 			{
 				exit=true;
+				break;
+				
+			}
+			case SDL_MOUSEBUTTONDOWN:
+			{
 				break;
 			}
 			case SDL_WINDOWEVENT:
@@ -154,6 +160,8 @@ void BaseApplication::run()
 	}
 	delete mesh;
 	delete atmo;
+	bgfx::destroyTexture(planet_texture_day);
+	bgfx::destroyTexture(planet_texture);
 	bgfx::destroyProgram(planet_program);
 	bgfx::destroyProgram(atmo_program);
 }

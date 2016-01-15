@@ -3,6 +3,16 @@
 #include "../libraries/stb/stb_image.c"
 #include <iostream>
 
+Texture::Texture()
+{
+}
+
+Texture::~Texture()
+{
+	bgfx::destroyTexture(m_texture);
+	bgfx::destroyUniform(m_uniform);
+}
+
 typedef unsigned char stbi_uc;
 extern "C" stbi_uc *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp);
 
@@ -44,7 +54,6 @@ bgfx::TextureHandle loadTexture(bx::FileReaderI* _reader, const char* _name, uin
 		uint8_t* img = NULL;
 		
 		img = stbi_load_from_memory( (uint8_t*)data, size, &width, &height, &comp, 4);
-		std::cout << "fuck" << std::endl;
 		BX_FREE(allocator, data);
 
 		if (NULL != img)
