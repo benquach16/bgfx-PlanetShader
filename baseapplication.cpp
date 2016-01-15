@@ -48,7 +48,7 @@ void BaseApplication::run()
 					   , 0x101010ff
 					   , 1.0f
 					   , 0);
-	
+
 	bool exit = false;
 	SDL_Event event;
 
@@ -65,10 +65,10 @@ void BaseApplication::run()
 											  | BGFX_TEXTURE_V_MIRROR
 											  | BGFX_TEXTURE_W_MIRROR);
 	bgfx::setViewName(0, "skybox");
+	
 	uint64_t state = 0
 		| BGFX_STATE_RGB_WRITE
 		| BGFX_STATE_ALPHA_WRITE
-		| BGFX_STATE_DEPTH_TEST_LESS
 		| BGFX_STATE_DEPTH_WRITE
 		| BGFX_STATE_BLEND_ALPHA
 		| BGFX_STATE_CULL_CCW
@@ -81,8 +81,6 @@ void BaseApplication::run()
 	float t = 1;
 	while (!exit)
 	{
-		// Set view 0 default viewport.
-		bgfx::setViewRect(0, 0, 0, m_width, m_height);
 
 		// Use debug font to print information about this example.
 		bgfx::dbgTextClear();
@@ -98,12 +96,13 @@ void BaseApplication::run()
 
 		float proj[16];
 		bx::mtxProj(proj, 60.0f, float(m_width)/float(m_height), 0.1f, 100.0f);
-		bgfx::setViewTransform(0, view, proj);
-
 		// Set view 0 default viewport.
 		bgfx::setViewRect(0, 0, 0, m_width, m_height);
-	
-		bgfx::touch(0);
+		bgfx::setViewTransform(0, view, proj);
+		bgfx::setViewRect(1, 0, 0, m_width, m_height);
+		bgfx::setViewTransform(1,view,proj);
+
+   		bgfx::touch(0);
 
 		//transform for planet
 		float mtx[16];
@@ -113,13 +112,13 @@ void BaseApplication::run()
 		
 		//bx::mtxRotateXY(mtx, 0, t);
 		float atmoMtx[16];
-		bx::mtxScale(atmoMtx, 3.2, 3.2, 3.2);
+		bx::mtxScale(atmoMtx, 4, 4, 4);
 		//transform for atmosphere
-
+		atmo->submit(0, atmo_program, atmoMtx, state);
 		bgfx::setTexture(0, s_planet_texture, planet_texture);
 		bgfx::setTexture(1, s_planet_texture_day, planet_texture_day);
-		mesh->submit(0, planet_program, mtx, state);
-		//atmo->submit(0, atmo_program, atmoMtx, state);
+		mesh->submit(1, planet_program, mtx, state);
+
 
 		// Advance to next frame. Rendering thread will be kicked to
 		// process submitted rendering primitives.
@@ -137,6 +136,7 @@ void BaseApplication::run()
 			}
 			case SDL_MOUSEBUTTONDOWN:
 			{
+				std::cout << "mouse pressed!" << std::endl;
 				break;
 			}
 			case SDL_WINDOWEVENT:
