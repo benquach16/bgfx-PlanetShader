@@ -13,7 +13,7 @@ class Texture
 public:
 	Texture();
 	~Texture();
-	void loadTexture();
+	void loadTexture(const char* _name, uint32_t _flags, uint8_t _skip = 0, bgfx::TextureInfo* _info = NULL);
 
 protected:
 	bgfx::TextureHandle m_texture;

@@ -3,8 +3,10 @@ $input v_pos, v_view, v_normal, v_color0, v_texcoord0
 
 #include "./common/common.sh"
 
+uniform vec4 cameraPostion;
 
-vec3 lightPosition = vec3(-5.0, 4.0, 0.0);
+
+vec3 lightPosition = vec3(-4.0, 5.0, .0);
 
 SAMPLER2D(s_planet_texture, 0);
 SAMPLER2D(s_planet_texture_day, 1);

@@ -53,18 +53,25 @@ void BaseApplication::run()
 	SDL_Event event;
 
 
-	
+
+	//needed to pass information to shader
 	bgfx::UniformHandle skybox = bgfx::createUniform("skybox", bgfx::UniformType::Int1);
-	
+	bgfx::UniformHandle cameraPosition = bgfx::createUniform("cameraPosition", bgfx::UniformType::Vec4);
+	bgfx::UniformHandle lightPosition = bgfx::createUniform("lightPosition", bgfx::UniformType::Vec4);
+	bgfx::UniformHandle resolution = bgfx::createUniform("resolution", bgfx::UniformType::Vec4);
+	//Temporary code
+	//move to mesh class eventually	
 	bgfx::UniformHandle s_planet_texture = bgfx::createUniform("s_planet_texture", bgfx::UniformType::Int1);
 	bgfx::UniformHandle s_planet_texture_day = bgfx::createUniform("s_planet_texture_day", bgfx::UniformType::Int1);
 	bgfx::TextureHandle planet_texture = loadTexture("night_map.bmp", 0 | BGFX_TEXTURE_U_MIRROR
 											  | BGFX_TEXTURE_V_MIRROR
 											  | BGFX_TEXTURE_W_MIRROR);
-	bgfx::TextureHandle planet_texture_day = loadTexture("mars_map.png", 0 | BGFX_TEXTURE_U_MIRROR
+	bgfx::TextureHandle planet_texture_day = loadTexture("day_map.bmp", 0 | BGFX_TEXTURE_U_MIRROR
 											  | BGFX_TEXTURE_V_MIRROR
 											  | BGFX_TEXTURE_W_MIRROR);
 	bgfx::setViewName(0, "skybox");
+	bgfx::setViewName(1, "atmosphere");
+	bgfx::setViewName(2, "planet");
 	
 	uint64_t state = 0
 		| BGFX_STATE_RGB_WRITE
@@ -79,6 +86,12 @@ void BaseApplication::run()
 	Mesh *mesh = meshLoad("sphere.bin");
 	Mesh *atmo = meshLoad("sphere.bin");
 	float t = 1;
+
+	int oldmouseX = 0;
+	int oldmouseY = 0;
+	int mouseX = 0;
+	int mouseY = 0;
+	float distance = -7.0f;
 	while (!exit)
 	{
 
@@ -89,11 +102,22 @@ void BaseApplication::run()
 
 		
 		float at[3]  = { 0.0f, 0.0f,  0.0f };
-		float eye[3] = { 0.0f, 0.0f, -7.0f };
+		float eye[3] = { 0.0f, 0.0f, distance };
 
 		float view[16];
-		bx::mtxLookAt(view, eye, at);
 
+		float mouseMtx[16];
+		bx::mtxRotateXY(mouseMtx, 0, t);
+		float temp[4];
+		bx::vec3MulMtx(temp, eye, mouseMtx);
+		bx::mtxLookAt(view,temp, at);
+		//todo : fix cam position
+		float eyeUniform[4] = { eye[0], eye[1], eye[2], 0.0f};
+		bgfx::setUniform(cameraPosition, eyeUniform);
+		float resUniform[4] = { m_width, m_height, 0, 0};
+		bgfx::setUniform(resolution, resUniform);
+
+		
 		float proj[16];
 		bx::mtxProj(proj, 60.0f, float(m_width)/float(m_height), 0.1f, 100.0f);
 		// Set view 0 default viewport.
@@ -101,23 +125,24 @@ void BaseApplication::run()
 		bgfx::setViewTransform(0, view, proj);
 		bgfx::setViewRect(1, 0, 0, m_width, m_height);
 		bgfx::setViewTransform(1,view,proj);
-
+		bgfx::setViewRect(2, 0, 0, m_width, m_height);
+		bgfx::setViewTransform(2,view,proj);
    		bgfx::touch(0);
 
 		//transform for planet
 		float mtx[16];
 
 		bx::mtxScale(mtx, 3, 3, 3);
-		t+=0.1f;
+		t+=0.001f;
 		
 		//bx::mtxRotateXY(mtx, 0, t);
 		float atmoMtx[16];
-		bx::mtxScale(atmoMtx, 4, 4, 4);
+		bx::mtxScale(atmoMtx, 4.0, 4.0, 4.0);
 		//transform for atmosphere
-		atmo->submit(0, atmo_program, atmoMtx, state);
+		atmo->submit(1, atmo_program, atmoMtx, state);
 		bgfx::setTexture(0, s_planet_texture, planet_texture);
 		bgfx::setTexture(1, s_planet_texture_day, planet_texture_day);
-		mesh->submit(1, planet_program, mtx, state);
+	mesh->submit(2, planet_program, mtx, state);
 
 
 		// Advance to next frame. Rendering thread will be kicked to
@@ -130,19 +155,32 @@ void BaseApplication::run()
 			{
 			case SDL_KEYDOWN:
 			{
-				exit=true;
+				if(event.key.keysym.sym == SDLK_z)
+				{
+					distance -= 0.5;
+				}
+				else if(event.key.keysym.sym == SDLK_a)
+				{
+					distance += 0.5;
+				}
+				else
+				{
+					exit = true;
+				}
 				break;
 				
 			}
 			case SDL_MOUSEBUTTONDOWN:
 			{
 				std::cout << "mouse pressed!" << std::endl;
+				SDL_GetMouseState(&mouseX, &mouseY);
+
 				break;
 			}
 			case SDL_WINDOWEVENT:
 			{
 				//needed to resize the rendering window
-				/*
+				
 				if(event.window.event == SDL_WINDOWEVENT_RESIZED)
 				{
 					m_width = event.window.data1;
@@ -151,7 +189,7 @@ void BaseApplication::run()
 
 					bgfx::reset(m_width, m_height, reset);
 				}
-				*/
+				
 			}
 			}
 		}
@@ -162,6 +200,8 @@ void BaseApplication::run()
 	delete atmo;
 	bgfx::destroyTexture(planet_texture_day);
 	bgfx::destroyTexture(planet_texture);
+	bgfx::destroyUniform(s_planet_texture);
+	bgfx::destroyUniform(s_planet_texture_day);
 	bgfx::destroyProgram(planet_program);
 	bgfx::destroyProgram(atmo_program);
 }

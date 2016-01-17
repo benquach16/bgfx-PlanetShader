@@ -9,6 +9,7 @@
 #include <bx/string.h>
 #include <vector>
 #include <string>
+#include "texture.h"
 #include "../libraries/ib-compress/readbitstream.h"
 #include "../libraries/ib-compress/indexbufferdecompression.h"
 
@@ -73,12 +74,14 @@ class Mesh
 public:
 	void load(bx::ReaderSeekerI* _reader);
 	void submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, uint64_t _state = BGFX_STATE_MASK) const;
+	void addTexture(const char* _name);
 protected:
 	bgfx::VertexDecl m_decl;
 	typedef std::vector<Group> GroupArray;
 	GroupArray m_groups;
 	//use this eventually for OOP
 	float m_mtx[16];
+	std::vector<Texture> m_textures;
 };
 
 Mesh* meshLoad(bx::ReaderSeekerI* _reader);
