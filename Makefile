@@ -20,7 +20,7 @@ BGFX_ALL=$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src/*.o
 LDFLAGS += $(LIBRARIES)
 LDFLAGS += -static 
 
-all: baseapplication.o programloader.o mesh.o texture.o memory.o makeshaders indexbufferdecompression.o 
+all: baseapplication.o programloader.o mesh.o texture.o memory.o makeshaders indexbufferdecompression.o skybox.o
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o memory.o texture.o mesh.o indexbufferdecompression.o main.cpp -o renderer
 
 baseapplication.o: baseapplication.h baseapplication.cpp 
@@ -43,6 +43,10 @@ mesh.o: engine/mesh.h engine/mesh.cpp
 
 texture.o: engine/texture.h engine/texture.cpp
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/texture.cpp -c
+
+skybox.o: engine/skybox.h engine/skybox.cpp
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/skybox.cpp -c
+
 
 
 makeshaders: makeshadervert makeshaderfrag

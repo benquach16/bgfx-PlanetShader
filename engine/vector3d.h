@@ -4,12 +4,13 @@
 class Vector3df
 {
 public:
-   	float m_x;
-	float m_y;
-	float m_z;
+   	float x;
+	float y;
+	float z;
 
 	
 	Vector3df(float x, float y, float z);
+		
 	
 
 };

@@ -142,7 +142,7 @@ void BaseApplication::run()
 		atmo->submit(1, atmo_program, atmoMtx, state);
 		bgfx::setTexture(0, s_planet_texture, planet_texture);
 		bgfx::setTexture(1, s_planet_texture_day, planet_texture_day);
-	mesh->submit(2, planet_program, mtx, state);
+		mesh->submit(2, planet_program, mtx, state);
 
 
 		// Advance to next frame. Rendering thread will be kicked to
