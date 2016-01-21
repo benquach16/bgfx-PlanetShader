@@ -3,6 +3,7 @@
 
 #include <bgfx/bgfx.h>
 #include <bgfx/bgfxplatform.h>
+#include <bgfx/bgfxdefines.h>
 #include <bx/commandline.h>
 #include <bx/fpumath.h>
 #include <bx/readerwriter.h>
@@ -72,16 +73,21 @@ struct Group
 class Mesh
 {
 public:
+	~Mesh();
 	void load(bx::ReaderSeekerI* _reader);
-	void submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, uint64_t _state = BGFX_STATE_MASK) const;
-	void addTexture(const char* _name);
+	void submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, uint64_t _state = BGFX_STATE_MASK);
+	void addTexture(const char* _name, uint32_t _flags);
+	void addTexture(bgfx::TextureHandle _texture);
+	//todo: move vector3d into here
+	//do all matrix multiplcation within classes
 protected:
 	bgfx::VertexDecl m_decl;
 	typedef std::vector<Group> GroupArray;
 	GroupArray m_groups;
 	//use this eventually for OOP
 	float m_mtx[16];
-	std::vector<Texture> m_textures;
+	std::vector<Texture*> m_textures;
+
 };
 
 Mesh* meshLoad(bx::ReaderSeekerI* _reader);

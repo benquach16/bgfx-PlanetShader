@@ -7,17 +7,19 @@ Texture::Texture()
 {
 }
 
+Texture::Texture(int _stage) : m_stage(_stage)
+{
+}
+
 Texture::~Texture()
 {
 	bgfx::destroyTexture(m_texture);
 	bgfx::destroyUniform(m_uniform);
 }
 
-typedef unsigned char stbi_uc;
-extern "C" stbi_uc *stbi_load_from_memory(stbi_uc const *buffer, int len, int *x, int *y, int *comp, int req_comp);
-
-bgfx::TextureHandle loadTexture(bx::FileReaderI* _reader, const char* _name, uint32_t _flags, uint8_t _skip, bgfx::TextureInfo* _info)
+void Texture::loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgfx::TextureInfo* _info)
 {
+	m_uniform = bgfx::createUniform("tex", bgfx::UniformType::Int1);
 	char filePath[512] = { '\0' };
 	if (NULL == strchr(_name, '/') )
 	{
@@ -26,25 +28,11 @@ bgfx::TextureHandle loadTexture(bx::FileReaderI* _reader, const char* _name, uin
 
 	strcat(filePath, _name);
 
-	if (NULL != bx::stristr(_name, ".dds")
-		||  NULL != bx::stristr(_name, ".pvr")
-		||  NULL != bx::stristr(_name, ".ktx") )
-	{
-		const bgfx::Memory* mem = loadMem(_reader, filePath);
-		if (NULL != mem)
-		{
-			return bgfx::createTexture(mem, _flags, _skip, _info);
-		}
-
-		bgfx::TextureHandle handle = BGFX_INVALID_HANDLE;
-		return handle;
-	}
-
 	bgfx::TextureHandle handle = BGFX_INVALID_HANDLE;
-	bx::AllocatorI* allocator = new bx::CrtAllocator;
-
+	bx::CrtAllocator allocator;
+	bx::CrtFileReader _reader;
 	uint32_t size = 0;
-	void* data = loadMem(_reader, allocator, filePath, &size);
+	void* data = loadMem(&_reader, &allocator, filePath, &size);
 	if (NULL != data)
 	{
 		int width  = 0;
@@ -54,7 +42,7 @@ bgfx::TextureHandle loadTexture(bx::FileReaderI* _reader, const char* _name, uin
 		uint8_t* img = NULL;
 		
 		img = stbi_load_from_memory( (uint8_t*)data, size, &width, &height, &comp, 4);
-		BX_FREE(allocator, data);
+		BX_FREE(&allocator, data);
 
 		if (NULL != img)
 		{
@@ -84,11 +72,13 @@ bgfx::TextureHandle loadTexture(bx::FileReaderI* _reader, const char* _name, uin
 		std::cout << "FAILED" << std::endl;
 	}
 
-	return handle;
+	m_texture = handle;
 }
 
-bgfx::TextureHandle loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgfx::TextureInfo* _info)
+void Texture::setTexture() const
 {
-	bx::CrtFileReader *reader = new bx::CrtFileReader;
-	return loadTexture(reader, _name, _flags, _skip, _info);
+	bgfx::setTexture(m_stage, m_uniform, m_texture);
 }
+
+
+

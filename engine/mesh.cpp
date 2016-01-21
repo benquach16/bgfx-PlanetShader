@@ -1,6 +1,17 @@
 #include "mesh.h"
 
 #include <iostream>
+
+
+Mesh::~Mesh()
+{
+	//clear textures
+	for(unsigned i = 0; i < m_textures.size(); i++)
+	{
+		delete m_textures[i];
+	}
+}
+
 namespace bgfx
 {
 	int32_t read(bx::ReaderI* _reader, bgfx::VertexDecl& _decl);
@@ -119,11 +130,13 @@ void Mesh::load(bx::ReaderSeekerI* _reader)
 			break;
 		}
 	}
+
+
 }
 
 
-#include "texture.h"
-void Mesh::submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, uint64_t _state) const
+
+void Mesh::submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, uint64_t _state)
 {
 	if (BGFX_STATE_MASK == _state)
 	{
@@ -136,6 +149,11 @@ void Mesh::submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, 
 			| BGFX_STATE_MSAA
 			;
 	}
+
+	for(unsigned i = 0 ; i < m_textures.size() ; i ++)
+	{
+		m_textures[i]->setTexture();
+	}
 	uint32_t cached = bgfx::setTransform(_mtx);
 	for (GroupArray::const_iterator it = m_groups.begin(), itEnd = m_groups.end(); it != itEnd; ++it)
 	{
@@ -147,6 +165,17 @@ void Mesh::submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, 
 		bgfx::submit(_id, _program);
 	}
 }
+
+void Mesh::addTexture(const char* _name, uint32_t _flags)
+{
+	//let index be stage
+	int stage = m_textures.size();
+	Texture *newTexture = new Texture(stage);
+	newTexture->loadTexture(_name, _flags);
+	m_textures.push_back(newTexture);
+}
+
+
 
 
 

@@ -59,16 +59,7 @@ void BaseApplication::run()
 	bgfx::UniformHandle cameraPosition = bgfx::createUniform("cameraPosition", bgfx::UniformType::Vec4);
 	bgfx::UniformHandle lightPosition = bgfx::createUniform("lightPosition", bgfx::UniformType::Vec4);
 	bgfx::UniformHandle resolution = bgfx::createUniform("resolution", bgfx::UniformType::Vec4);
-	//Temporary code
-	//move to mesh class eventually	
-	bgfx::UniformHandle s_planet_texture = bgfx::createUniform("s_planet_texture", bgfx::UniformType::Int1);
-	bgfx::UniformHandle s_planet_texture_day = bgfx::createUniform("s_planet_texture_day", bgfx::UniformType::Int1);
-	bgfx::TextureHandle planet_texture = loadTexture("night_map.bmp", 0 | BGFX_TEXTURE_U_MIRROR
-											  | BGFX_TEXTURE_V_MIRROR
-											  | BGFX_TEXTURE_W_MIRROR);
-	bgfx::TextureHandle planet_texture_day = loadTexture("day_map.bmp", 0 | BGFX_TEXTURE_U_MIRROR
-											  | BGFX_TEXTURE_V_MIRROR
-											  | BGFX_TEXTURE_W_MIRROR);
+
 	bgfx::setViewName(0, "skybox");
 	bgfx::setViewName(1, "atmosphere");
 	bgfx::setViewName(2, "planet");
@@ -85,6 +76,11 @@ void BaseApplication::run()
 	bgfx::ProgramHandle skybox_program = m_programloader.loadProgram("vs_skybox", "fs_skybox");
 	Mesh *mesh = meshLoad("sphere.bin");
 	Mesh *atmo = meshLoad("sphere.bin");
+
+	
+	mesh->addTexture("mars_map.bmp",  0 | BGFX_TEXTURE_U_MIRROR
+					  | BGFX_TEXTURE_V_MIRROR
+					  | BGFX_TEXTURE_W_MIRROR);
 	float t = 1;
 
 	int oldmouseX = 0;
@@ -140,8 +136,7 @@ void BaseApplication::run()
 		bx::mtxScale(atmoMtx, 4.0, 4.0, 4.0);
 		//transform for atmosphere
 		atmo->submit(1, atmo_program, atmoMtx, state);
-		bgfx::setTexture(0, s_planet_texture, planet_texture);
-		bgfx::setTexture(1, s_planet_texture_day, planet_texture_day);
+		//bgfx::setTexture(0, s_planet_texture, planet_texture_day);
 		mesh->submit(2, planet_program, mtx, state);
 
 
@@ -198,10 +193,7 @@ void BaseApplication::run()
 	}
 	delete mesh;
 	delete atmo;
-	bgfx::destroyTexture(planet_texture_day);
-	bgfx::destroyTexture(planet_texture);
-	bgfx::destroyUniform(s_planet_texture);
-	bgfx::destroyUniform(s_planet_texture_day);
+
 	bgfx::destroyProgram(planet_program);
 	bgfx::destroyProgram(atmo_program);
 }

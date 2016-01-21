@@ -8,8 +8,7 @@ uniform vec4 cameraPostion;
 
 vec3 lightPosition = vec3(-4.0, 5.0, .0);
 
-SAMPLER2D(s_planet_texture, 0);
-SAMPLER2D(s_planet_texture_day, 1);
+SAMPLER2D(tex, 0);
 void main()
 {
 	vec3 normal = normalize(v_normal);
@@ -37,16 +36,16 @@ void main()
 	//speculards
 	vec3 reflectVec = normalize(-reflect(lightDirection, normal));
 	float spec = 0.1* pow(max(dot(reflectVec, viewDirection), 0.0), 9.0);
-	vec4 tex = texture2D(s_planet_texture, v_texcoord0.xy);
+	//vec4 tex = texture2D(s_planet_texture, v_texcoord0.xy);
 
 	//attenuation
 	float lightDistance = length(lightPosition);
 	float attenuation = 1.0;
 	
-    vec4 texDay = toLinearAccurate(texture2D(s_planet_texture_day, v_texcoord0.xy/1.1));
+    vec4 texDay = toLinearAccurate(texture2D(tex, v_texcoord0.xy/1.1));
 	//vec4 texDay = texture2D(s_planet_texture_day, v_texcoord0.xy);
 	texDay = texDay * max(dot(normal, lightDirection), 0.0);
-	tex = tex * max(dot(normal, lightDirection), 0.0);
+	//tex = tex * max(dot(normal, lightDirection), 0.0);
 	vec4 finalColor = texDay;
 	
 	gl_FragColor =ambient + attenuation*(finalColor+ spec) + f_rim * vec4(0.3,0.6,1.0,1.0);
