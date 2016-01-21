@@ -29,8 +29,8 @@ void Mesh::load(bx::ReaderSeekerI* _reader)
 	Group group;
 
 		
-	bx::AllocatorI* allocator = new bx::CrtAllocator;
-
+	//bx::AllocatorI* allocator = new bx::CrtAllocator;
+	bx::CrtAllocator allocator;
 	uint32_t chunk;
 	while (4 == bx::read(_reader, chunk) )
 	{
@@ -75,14 +75,14 @@ void Mesh::load(bx::ReaderSeekerI* _reader)
 			uint32_t compressedSize;
 			bx::read(_reader, compressedSize);
 
-			void* compressedIndices = BX_ALLOC(allocator, compressedSize);
+			void* compressedIndices = BX_ALLOC(&allocator, compressedSize);
 
 			bx::read(_reader, compressedIndices, compressedSize);
 
 			ReadBitstream rbs( (const uint8_t*)compressedIndices, compressedSize);
 			DecompressIndexBuffer( (uint16_t*)mem->data, numIndices / 3, rbs);
 
-			BX_FREE(allocator, compressedIndices);
+			BX_FREE(&allocator, compressedIndices);
 
 			group.m_ibh = bgfx::createIndexBuffer(mem);
 		}
