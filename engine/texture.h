@@ -21,7 +21,7 @@ public:
 	void setTexture() const;
 
 	
-   
+protected:   
 	bgfx::TextureHandle m_texture;
 	bgfx::UniformHandle m_uniform;
 	int m_stage;
