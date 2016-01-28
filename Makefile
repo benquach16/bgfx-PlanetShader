@@ -21,7 +21,7 @@ LDFLAGS += $(LIBRARIES)
 LDFLAGS += -static 
 
 all: baseapplication.o programloader.o mesh.o texture.o memory.o makeshaders indexbufferdecompression.o skybox.o
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o memory.o texture.o mesh.o indexbufferdecompression.o main.cpp -o renderer
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o memory.o texture.o mesh.o indexbufferdecompression.o skybox.o main.cpp -o renderer
 
 baseapplication.o: baseapplication.h baseapplication.cpp 
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c

@@ -75,12 +75,13 @@ void BaseApplication::run()
 	bgfx::ProgramHandle atmo_program = m_programloader.loadProgram("vs_atmo", "fs_atmo");
 	bgfx::ProgramHandle skybox_program = m_programloader.loadProgram("vs_skybox", "fs_skybox");
 	Mesh *mesh = meshLoad("sphere.bin");
-	Mesh *atmo = meshLoad("sphere.bin");
-
-	
+	Mesh *atmo = meshLoad("sphere.bin");	
 	mesh->addTexture("mars_map.bmp",  0 | BGFX_TEXTURE_U_MIRROR
 					  | BGFX_TEXTURE_V_MIRROR
 					  | BGFX_TEXTURE_W_MIRROR);
+
+	Skybox sky;
+	sky.setupSkybox();
 	float t = 1;
 
 	int oldmouseX = 0;
@@ -130,7 +131,8 @@ void BaseApplication::run()
 
 		bx::mtxScale(mtx, 3, 3, 3);
 		t+=0.001f;
-		
+
+		sky.renderSkybox(planet_program);
 		//bx::mtxRotateXY(mtx, 0, t);
 		float atmoMtx[16];
 		bx::mtxScale(atmoMtx, 4.0, 4.0, 4.0);

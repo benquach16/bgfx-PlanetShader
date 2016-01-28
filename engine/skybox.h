@@ -15,7 +15,9 @@ public:
 	void setupSkybox();
 	void renderSkybox(bgfx::ProgramHandle program);
 
-
+protected:
+	bgfx::VertexBufferHandle vbh;
+	bgfx::IndexBufferHandle ibh;
 };
 
 

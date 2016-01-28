@@ -19,6 +19,7 @@
 
 #include "engine/mesh.h"
 #include "engine/texture.h"
+#include "engine/skybox.h"
 #include "programloader.h"
 
 class BaseApplication
