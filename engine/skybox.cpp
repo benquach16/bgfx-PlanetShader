@@ -75,7 +75,10 @@ void Skybox::setupSkybox()
 		bgfx::makeRef(s_cubeIndices, sizeof(s_cubeIndices) )
 		);
 
-	
+	//load a texture here
+	m_texture.loadTexture("mars_map.bmp",  0 | BGFX_TEXTURE_U_MIRROR
+					  | BGFX_TEXTURE_V_MIRROR
+					  | BGFX_TEXTURE_W_MIRROR);
 }
 
 
