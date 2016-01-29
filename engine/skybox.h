@@ -5,6 +5,11 @@
 #include <bgfx/bgfxplatform.h>
 #include <bgfx/bgfxdefines.h>
 
+#include <bx/handlealloc.h>
+#include <bx/fpumath.h>
+#include <bx/readerwriter.h>
+#include <bx/string.h>
+
 //create a box here
 //lace camera inside it
 

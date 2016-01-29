@@ -42,18 +42,18 @@ static PosColorTexCoord0Vertex s_cubeVertices[8] =
 
 static const uint16_t s_cubeIndices[36] =
 {
-	0, 1, 2, // 0
-	1, 3, 2,
-	4, 6, 5, // 2
-	5, 6, 7,
-	0, 2, 4, // 4
-	4, 2, 6,
-	1, 5, 3, // 6
-	5, 7, 3,
-	0, 4, 1, // 8
-	4, 5, 1,
-	2, 3, 6, // 10
-	6, 3, 7,
+	2, 1, 0, // 0
+	2, 3, 1,
+	5, 6, 4, // 2
+	7, 6, 5,
+	4, 2, 0, // 4
+	6, 2, 4,
+	3, 5, 1, // 6
+	3, 7, 5,
+	1, 4, 0, // 8
+	1, 5, 4,
+	6, 3, 2, // 10
+	7, 3, 6,
 };
 
 void Skybox::setupSkybox()
@@ -79,6 +79,9 @@ void Skybox::renderSkybox(bgfx::ProgramHandle program)
 
 	//render skybox code here
 	bgfx::touch(0);
+	float mtx[16];
+	bx::mtxScale(mtx, 10, 10, 10);
+	bgfx::setTransform(mtx);
 	bgfx::setVertexBuffer(vbh);
 	bgfx::setIndexBuffer(ibh);
 	bgfx::setState(BGFX_STATE_DEFAULT);
