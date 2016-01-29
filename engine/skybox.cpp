@@ -56,21 +56,26 @@ static const uint16_t s_cubeIndices[36] =
 	7, 3, 6,
 };
 
+Skybox::~Skybox()
+{
+	bgfx::destroyIndexBuffer(m_ibh);
+}
+
 void Skybox::setupSkybox()
 {
 	PosColorTexCoord0Vertex::init();
-	vbh = bgfx::createVertexBuffer(
+	m_vbh = bgfx::createVertexBuffer(
 		// Static data can be passed with bgfx::makeRef
 		bgfx::makeRef(s_cubeVertices, sizeof(s_cubeVertices) )
 		, PosColorTexCoord0Vertex::ms_decl
 		);
 
-	ibh = bgfx::createIndexBuffer(
+	m_ibh = bgfx::createIndexBuffer(
 		// Static data can be passed with bgfx::makeRef
 		bgfx::makeRef(s_cubeIndices, sizeof(s_cubeIndices) )
 		);
 
-
+	
 }
 
 
@@ -82,8 +87,8 @@ void Skybox::renderSkybox(bgfx::ProgramHandle program)
 	float mtx[16];
 	bx::mtxScale(mtx, 10, 10, 10);
 	bgfx::setTransform(mtx);
-	bgfx::setVertexBuffer(vbh);
-	bgfx::setIndexBuffer(ibh);
+	bgfx::setVertexBuffer(m_vbh);
+	bgfx::setIndexBuffer(m_ibh);
 	bgfx::setState(BGFX_STATE_DEFAULT);
 	bgfx::submit(0, program);
 }

@@ -10,6 +10,8 @@
 #include <bx/readerwriter.h>
 #include <bx/string.h>
 
+#include "texture.h"
+
 //create a box here
 //lace camera inside it
 
@@ -17,12 +19,14 @@
 class Skybox
 {
 public:
+	~Skybox();
 	void setupSkybox();
 	void renderSkybox(bgfx::ProgramHandle program);
 
 protected:
-	bgfx::VertexBufferHandle vbh;
-	bgfx::IndexBufferHandle ibh;
+	bgfx::VertexBufferHandle m_vbh;
+	bgfx::IndexBufferHandle m_ibh;
+	Texture m_texture;
 };
 
 

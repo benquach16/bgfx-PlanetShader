@@ -132,7 +132,7 @@ void BaseApplication::run()
 		bx::mtxScale(mtx, 3, 3, 3);
 		t+=0.001f;
 
-		sky.renderSkybox(planet_program);
+		sky.renderSkybox(skybox_program);
 		//bx::mtxRotateXY(mtx, 0, t);
 		float atmoMtx[16];
 		bx::mtxScale(atmoMtx, 4.0, 4.0, 4.0);
