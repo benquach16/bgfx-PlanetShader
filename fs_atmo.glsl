@@ -93,7 +93,7 @@ float scatteringCalc(vec3 v1, vec3 v2)
 }
 
 
-vec3 lightPosition = vec3(-5.0, 6.0, 0.0);
+vec3 lightPosition = vec3(-4.0, 5.0, 0.0);
 uniform vec4 cameraPosition;
 uniform vec4 resolution;
 
@@ -101,6 +101,7 @@ uniform vec4 resolution;
 void main()
 {
 	vec3 eye = -cameraPosition.xyz;
+	eye = vec3(0.0, 0.0, -7.0);
 	vec3 viewDirection = -normalize(v_view);
 	vec2 res = resolution.xy;
 	vec3 startingRay = ray_dir( 45.0, res.xy, gl_FragCoord.xy );
