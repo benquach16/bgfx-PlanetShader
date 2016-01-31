@@ -100,8 +100,8 @@ uniform vec4 resolution;
 
 void main()
 {
-	vec3 eye = cameraPosition.xyz;
-	vec3 viewDirection = normalize(v_view);
+	vec3 eye = -cameraPosition.xyz;
+	vec3 viewDirection = -normalize(v_view);
 	vec2 res = resolution.xy;
 	vec3 startingRay = ray_dir( 45.0, res.xy, gl_FragCoord.xy );
 	// sun light dir

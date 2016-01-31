@@ -105,11 +105,12 @@ void BaseApplication::run()
 
 		float mouseMtx[16];
 		bx::mtxRotateXY(mouseMtx, 0, t);
+		t+=0.001f;
 		float temp[4];
 		bx::vec3MulMtx(temp, eye, mouseMtx);
 		bx::mtxLookAt(view,temp, at);
 		//todo : fix cam position
-		float eyeUniform[4] = { eye[0], eye[1], eye[2], 0.0f};
+		float eyeUniform[4] = { temp[0], temp[1],temp[2], 0.0f};
 		bgfx::setUniform(cameraPosition, eyeUniform);
 		float resUniform[4] = { m_width, m_height, 0, 0};
 		bgfx::setUniform(resolution, resUniform);
@@ -130,7 +131,7 @@ void BaseApplication::run()
 		float mtx[16];
 
 		bx::mtxScale(mtx, 3, 3, 3);
-		t+=0.001f;
+
 
 		sky.renderSkybox(skybox_program);
 		//bx::mtxRotateXY(mtx, 0, t);

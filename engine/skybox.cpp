@@ -28,14 +28,14 @@ bgfx::VertexDecl PosColorTexCoord0Vertex::ms_decl;
 
 static PosColorTexCoord0Vertex s_cubeVertices[8] =
 {
-	{-10.0f,  10.0f,  10.0f, 0, 0},
-	{ 10.0f,  10.0f,  10.0f, 0x7fff, 0 },
-	{-10.0f, -10.0f,  10.0f, 0, 0x7fff },
-	{ 10.0f, -10.0f,  10.0f, 0x7fff, 0x7fff },
-	{-10.0f,  10.0f, -10.0f, 0, 0 },
-	{ 10.0f,  10.0f, -10.0f, 0x7fff, 0 },
-	{-10.0f, -10.0f, -10.0f, 0, 0x7fff },
-	{ 10.0f, -10.0f, -10.0f, 0x7fff, 0x7fff},
+	{-1.0f,  1.0f,  1.0f, 0, 0},
+	{ 1.0f,  1.0f,  1.0f, 0x7fff, 0 },
+	{-1.0f, -1.0f,  1.0f, 0, 0x7fff },
+	{ 1.0f, -1.0f,  1.0f, 0x7fff, 0x7fff },
+	{-1.0f,  1.0f, -1.0f, 0, 0 },
+	{ 1.0f,  1.0f, -1.0f, 0x7fff, 0 },
+	{-1.0f, -1.0f, -1.0f, 0, 0x7fff },
+	{ 1.0f, -1.0f, -1.0f, 0x7fff, 0x7fff},
 };
 
 static const uint16_t s_cubeIndices[36] =
@@ -87,8 +87,8 @@ void Skybox::renderSkybox(bgfx::ProgramHandle program)
 	//render skybox code here
 	bgfx::touch(0);
 	float mtx[16];
-	//bx::mtxScale(mtx, 10, 10, 10);
-	//bgfx::setTransform(mtx);
+	bx::mtxScale(mtx, 8, 8, 8);
+	bgfx::setTransform(mtx);
 	bgfx::setVertexBuffer(m_vbh);
 	bgfx::setIndexBuffer(m_ibh);
 	bgfx::setState(BGFX_STATE_DEFAULT);

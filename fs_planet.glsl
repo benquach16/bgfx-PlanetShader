@@ -3,19 +3,19 @@ $input v_pos, v_view, v_normal, v_color0, v_texcoord0
 
 #include "./common/common.sh"
 
-uniform vec4 cameraPostion;
-
-
+uniform vec4 cameraPosition;
 vec3 lightPosition = vec3(-4.0, 5.0, .0);
 
 SAMPLER2D(tex, 0);
+
 void main()
 {
 	vec3 normal = normalize(v_normal);
 	vec3 viewDirection = -normalize(v_view);
 	vec3 vertexPosition = v_pos;
 
-	vec3 lightDirection = normalize(lightPosition - vertexPosition);
+	//vec3 lightDirection = normalize(lightPosition - vertexPosition);
+	vec3 lightDirection = normalize(lightPosition - cameraPosition.xyz);
 	//viewDirection = normalize(viewDirection - vertexPosition);
 
 	//apply lamberts cosine law
