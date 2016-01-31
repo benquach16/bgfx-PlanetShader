@@ -17,7 +17,7 @@ public:
 	~Texture();
 	//todo - replace with SOIL or something
 	void loadTexture(const char* _name, uint32_t _flags, uint8_t _skip = 0, bgfx::TextureInfo* _info = NULL);
-	
+	void setStage(int _stage);
 	void setTexture() const;
 
 	

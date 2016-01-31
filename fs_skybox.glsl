@@ -7,11 +7,12 @@ $input v_texcoord0
 
 #include "./common/common.sh"
 
-SAMPLERCUBE(skybox, 1);
+SAMPLER2D(tex, 0);
 
 uniform mat4 u_mtx;
 
 void main()
 {
-	gl_FragColor = vec4(0.5, 0.7, 0.5, 1.0);
+    gl_FragColor = toLinearAccurate(texture2D(tex, v_texcoord0.xy));
+	//gl_FragColor = vec4(0.5, 1.0, 0.3, 1.0);
 }

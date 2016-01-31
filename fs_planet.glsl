@@ -42,7 +42,7 @@ void main()
 	float lightDistance = length(lightPosition);
 	float attenuation = 1.0;
 	
-    vec4 texDay = toLinearAccurate(texture2D(tex, v_texcoord0.xy/1.1));
+    vec4 texDay = toLinearAccurate(texture2D(tex, v_texcoord0.xy));
 	//vec4 texDay = texture2D(s_planet_texture_day, v_texcoord0.xy);
 	texDay = texDay * max(dot(normal, lightDirection), 0.0);
 	//tex = tex * max(dot(normal, lightDirection), 0.0);

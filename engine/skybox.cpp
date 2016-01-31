@@ -6,7 +6,6 @@ struct PosColorTexCoord0Vertex
 	float m_x;
 	float m_y;
 	float m_z;
-	uint32_t m_rgba;
 	float m_u;
 	float m_v;
 
@@ -15,7 +14,6 @@ struct PosColorTexCoord0Vertex
 			ms_decl
 				.begin()
 				.add(bgfx::Attrib::Position,  3, bgfx::AttribType::Float)
-				.add(bgfx::Attrib::Color0,    4, bgfx::AttribType::Uint8, true)
 				.add(bgfx::Attrib::TexCoord0, 2, bgfx::AttribType::Float)
 				.end();
 		}
@@ -30,14 +28,14 @@ bgfx::VertexDecl PosColorTexCoord0Vertex::ms_decl;
 
 static PosColorTexCoord0Vertex s_cubeVertices[8] =
 {
-	{-1.0f,  1.0f,  1.0f, 0xff000000 },
-	{ 1.0f,  1.0f,  1.0f, 0xff0000ff },
-	{-1.0f, -1.0f,  1.0f, 0xff00ff00 },
-	{ 1.0f, -1.0f,  1.0f, 0xff00ffff },
-	{-1.0f,  1.0f, -1.0f, 0xffff0000 },
-	{ 1.0f,  1.0f, -1.0f, 0xffff00ff },
-	{-1.0f, -1.0f, -1.0f, 0xffffff00 },
-	{ 1.0f, -1.0f, -1.0f, 0xffffffff },
+	{-10.0f,  10.0f,  10.0f, 0, 0},
+	{ 10.0f,  10.0f,  10.0f, 0x7fff, 0 },
+	{-10.0f, -10.0f,  10.0f, 0, 0x7fff },
+	{ 10.0f, -10.0f,  10.0f, 0x7fff, 0x7fff },
+	{-10.0f,  10.0f, -10.0f, 0, 0 },
+	{ 10.0f,  10.0f, -10.0f, 0x7fff, 0 },
+	{-10.0f, -10.0f, -10.0f, 0, 0x7fff },
+	{ 10.0f, -10.0f, -10.0f, 0x7fff, 0x7fff},
 };
 
 static const uint16_t s_cubeIndices[36] =
@@ -76,6 +74,7 @@ void Skybox::setupSkybox()
 		);
 
 	//load a texture here
+	m_texture.setStage(0);
 	m_texture.loadTexture("mars_map.bmp",  0 | BGFX_TEXTURE_U_MIRROR
 					  | BGFX_TEXTURE_V_MIRROR
 					  | BGFX_TEXTURE_W_MIRROR);
@@ -88,10 +87,11 @@ void Skybox::renderSkybox(bgfx::ProgramHandle program)
 	//render skybox code here
 	bgfx::touch(0);
 	float mtx[16];
-	bx::mtxScale(mtx, 10, 10, 10);
-	bgfx::setTransform(mtx);
+	//bx::mtxScale(mtx, 10, 10, 10);
+	//bgfx::setTransform(mtx);
 	bgfx::setVertexBuffer(m_vbh);
 	bgfx::setIndexBuffer(m_ibh);
 	bgfx::setState(BGFX_STATE_DEFAULT);
+	m_texture.setTexture();
 	bgfx::submit(0, program);
 }

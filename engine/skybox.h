@@ -19,6 +19,7 @@
 class Skybox
 {
 public:
+	
 	~Skybox();
 	void setupSkybox();
 	void renderSkybox(bgfx::ProgramHandle program);

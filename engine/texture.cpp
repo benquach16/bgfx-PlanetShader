@@ -75,6 +75,11 @@ void Texture::loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgf
 	m_texture = handle;
 }
 
+void Texture::setStage(int _stage)
+{
+	m_stage = _stage;
+}
+
 void Texture::setTexture() const
 {
 	bgfx::setTexture(m_stage, m_uniform, m_texture);
