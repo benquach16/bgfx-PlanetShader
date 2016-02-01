@@ -112,14 +112,19 @@ mat3 rot3xy( vec2 angle ) {
 void main()
 {
 	vec3 eye = cameraPosition.xyz;
-	eye = vec3(0.0, 0.0, -7.0);
+	//eye = vec3(0.0, 0.0, -7.0);
 	vec3 viewDirection = -normalize(v_view);
 	vec2 res = resolution.xy;
 	vec3 startingRay = ray_dir( 45.0, res.xy, gl_FragCoord.xy );
 	//multiply ray by the rotation of the camera from the original point
+
 	mat3 rot = rot3xy(vec2(0.0, cameraPosition.w));
 	startingRay = startingRay * rot;
-	eye = eye * rot;
+
+
+   
+
+
 
 	
 	// sun light dir
@@ -155,6 +160,7 @@ void main()
 		vec2 sampleIntersection = rayIntersectSphere(samplePoint, lightDirection, R);
 		vec3 sampleLightRay = samplePoint + lightDirection * sampleIntersection.y;
 		//this is an attenuation calculation
+
 		//took the double scattering calcs from shadertoy as well
 		//GPUGems method was faulty with this code for some reason
 		float n = ( scatteringCalc( sampleRayStart, samplePoint ) + scatteringCalc( samplePoint, sampleLightRay ) ) * ( PI * 4.0 );

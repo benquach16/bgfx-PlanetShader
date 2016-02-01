@@ -29,13 +29,14 @@ bgfx::VertexDecl PosColorTexCoord0Vertex::ms_decl;
 static PosColorTexCoord0Vertex s_cubeVertices[8] =
 {
 	{-1.0f,  1.0f,  1.0f, 0, 0},
-	{ 1.0f,  1.0f,  1.0f, 0x7fff, 0 },
-	{-1.0f, -1.0f,  1.0f, 0, 0x7fff },
-	{ 1.0f, -1.0f,  1.0f, 0x7fff, 0x7fff },
-	{-1.0f,  1.0f, -1.0f, 0, 0 },
-	{ 1.0f,  1.0f, -1.0f, 0x7fff, 0 },
-	{-1.0f, -1.0f, -1.0f, 0, 0x7fff },
-	{ 1.0f, -1.0f, -1.0f, 0x7fff, 0x7fff},
+	{ 1.0f,  1.0f,  1.0f, 1.0, 0 },
+	{-1.0f, -1.0f,  1.0f, 0, 1.0 },
+	{ 1.0f, -1.0f,  1.0f, 1.0, 1.0 },
+	
+	{-1.0f,  1.0f, -1.0f, 1.0, 0 },
+	{ 1.0f,  1.0f, -1.0f, 0, 0 },
+	{-1.0f, -1.0f, -1.0f, 1.00, 1.0 },
+	{ 1.0f, -1.0f, -1.0f, 0, 1.0},
 };
 
 static const uint16_t s_cubeIndices[36] =
@@ -75,7 +76,7 @@ void Skybox::setupSkybox()
 
 	//load a texture here
 	m_texture.setStage(0);
-	m_texture.loadTexture("mars_map.bmp",  0 | BGFX_TEXTURE_U_MIRROR
+	m_texture.loadTexture("space.png",  0 | BGFX_TEXTURE_U_MIRROR
 					  | BGFX_TEXTURE_V_MIRROR
 					  | BGFX_TEXTURE_W_MIRROR);
 }
