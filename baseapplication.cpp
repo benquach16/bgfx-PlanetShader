@@ -110,7 +110,7 @@ void BaseApplication::run()
 		bx::vec3MulMtx(temp, eye, mouseMtx);
 		bx::mtxLookAt(view,temp, at);
 		//todo : fix cam position
-		float eyeUniform[4] = { temp[0], temp[1],temp[2], 0.0f};
+		float eyeUniform[4] = { temp[0], temp[1],temp[2], t};
 		bgfx::setUniform(cameraPosition, eyeUniform);
 		float resUniform[4] = { m_width, m_height, 0, 0};
 		bgfx::setUniform(resolution, resUniform);

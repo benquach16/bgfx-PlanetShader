@@ -11,24 +11,24 @@ const float MAX = 10000.0;
 // scatter const
 const float K_R = 0.166;
 const float K_M = 0.0025;
-const float E = 14.3;
+const float E = 17.3;
 const vec3  C_R = vec3( 0.3, 0.7, 1.0 ); // 1 / wavelength ^ 4
 const float G_M = -0.85;// Mie g
 const float G_M2 = G_M*G_M;
 
 const float R = 2.4;
-const float R_INNER = 2.2;
+const float R_INNER = 2.15;
 const float SCALE_L = 1.0 / ( R - R_INNER ); //fScale
 const float SCALE = 0.25;
 
 const float SCALEDEPTH = 0.25;
 const float SCALEOVERDEPTH = SCALE_L / SCALEDEPTH;
 
-const int NUM_OUT_SCATTER = 20;
-const float FNUM_OUT_SCATTER = 20.0;
+const int NUM_OUT_SCATTER = 10;
+const float FNUM_OUT_SCATTER = 10.0;
 
-const int NUM_IN_SCATTER = 20;
-const float FNUM_IN_SCATTER = 20.0;
+const int NUM_IN_SCATTER = 10;
+const float FNUM_IN_SCATTER = 10.0;
 
 
 // ray direction
@@ -97,14 +97,31 @@ vec3 lightPosition = vec3(-4.0, 5.0, 0.0);
 uniform vec4 cameraPosition;
 uniform vec4 resolution;
 
+// angle : pitch, yaw
+mat3 rot3xy( vec2 angle ) {
+	vec2 c = cos( angle );
+	vec2 s = sin( angle );
+
+	return mat3(
+		c.y      ,  0.0, -s.y,
+		s.y * s.x,  c.x,  c.y * s.x,
+		s.y * c.x, -s.x,  c.y * c.x
+		);
+}
 
 void main()
 {
-	vec3 eye = -cameraPosition.xyz;
+	vec3 eye = cameraPosition.xyz;
 	eye = vec3(0.0, 0.0, -7.0);
 	vec3 viewDirection = -normalize(v_view);
 	vec2 res = resolution.xy;
 	vec3 startingRay = ray_dir( 45.0, res.xy, gl_FragCoord.xy );
+	//multiply ray by the rotation of the camera from the original point
+	mat3 rot = rot3xy(vec2(0.0, cameraPosition.w));
+	startingRay = startingRay * rot;
+	eye = eye * rot;
+
+	
 	// sun light dir
 	vec3 lightDirection = normalize(v_pos - lightPosition);
 	float cameraHeight = length(eye);
@@ -112,11 +129,9 @@ void main()
 	float fFar = length(startingRay);
 
 	vec2 intersection = rayIntersectSphere(eye, startingRay, R);
-	if(intersection.x > intersection.y)
-	{
-		//ray did not hit sphere
-		discard;
-	}
+	vec2 intersectInner = rayIntersectSphere( eye, startingRay, R_INNER );
+	intersection.y = min( intersection.y, intersectInner.x );
+	
 
 
 	
