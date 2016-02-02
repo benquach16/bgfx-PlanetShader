@@ -25,6 +25,29 @@ struct PosColorTexCoord0Vertex
 
 bgfx::VertexDecl PosColorTexCoord0Vertex::ms_decl;
 
+//make like several different faces so that we can render 6 different texture maps properly
+
+PosColorTexCoord0Vertex northface[4] = //heh
+{
+	{-1.0f,  1.0f,  1.0f, 0, 0},
+	{ 1.0f,  1.0f,  1.0f, 1.0, 0 },
+	{-1.0f, -1.0f,  1.0f, 0, 1.0 },
+	{ 1.0f, -1.0f,  1.0f, 1.0, 1.0 },	
+};
+
+const uint16_t northface_indices[6] =
+{
+	2, 1, 0,
+	2, 3, 1,
+};
+
+PosColorTexCoord0Vertex southface[4] = //heh
+{
+	{-1.0f,  1.0f, -1.0f, 0, 0 },
+	{ 1.0f,  1.0f, -1.0f, 1.0, 0 },
+	{-1.0f, -1.0f, -1.0f, 0, 1.0 },
+	{ 1.0f, -1.0f, -1.0f, 1.0, 1.0},
+};
 
 static PosColorTexCoord0Vertex s_cubeVertices[8] =
 {
@@ -35,7 +58,7 @@ static PosColorTexCoord0Vertex s_cubeVertices[8] =
 	
 	{-1.0f,  1.0f, -1.0f, 1.0, 0 },
 	{ 1.0f,  1.0f, -1.0f, 0, 0 },
-	{-1.0f, -1.0f, -1.0f, 1.00, 1.0 },
+	{-1.0f, -1.0f, -1.0f, 1.0, 1.0 },
 	{ 1.0f, -1.0f, -1.0f, 0, 1.0},
 };
 
