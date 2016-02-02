@@ -16,8 +16,8 @@ const vec3  C_R = vec3( 0.3, 0.7, 1.0 ); // 1 / wavelength ^ 4
 const float G_M = -0.85;// Mie g
 const float G_M2 = G_M*G_M;
 
-const float R = 2.4;
-const float R_INNER = 2.2;
+const float R = 2.45;
+const float R_INNER = 2.1;
 const float SCALE_L = 1.0 / ( R - R_INNER ); //fScale
 const float SCALE = 0.25;
 
@@ -95,7 +95,6 @@ float scatteringCalc(vec3 v1, vec3 v2)
 
 vec3 lightPosition = vec3(0.0, 0.0, -7.0);
 uniform vec4 cameraPosition;
-uniform vec4 resolution;
 
 // angle : pitch, yaw
 mat3 rot3xy( vec2 angle ) {
@@ -114,7 +113,7 @@ void main()
 	vec3 eye = cameraPosition.xyz;
 	//eye = vec3(0.0, 0.0, -7.0);
 	vec3 viewDirection = -normalize(v_view);
-	vec2 res = resolution.xy;
+	vec2 res = u_viewRect.zw;
 	vec3 startingRay = ray_dir( 45.0, res.xy, gl_FragCoord.xy );
 	//multiply ray by the rotation of the camera from the original point
 

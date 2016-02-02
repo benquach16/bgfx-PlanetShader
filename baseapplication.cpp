@@ -58,7 +58,6 @@ void BaseApplication::run()
 	bgfx::UniformHandle skybox = bgfx::createUniform("skybox", bgfx::UniformType::Int1);
 	bgfx::UniformHandle cameraPosition = bgfx::createUniform("cameraPosition", bgfx::UniformType::Vec4);
 	bgfx::UniformHandle lightPosition = bgfx::createUniform("lightPosition", bgfx::UniformType::Vec4);
-	bgfx::UniformHandle resolution = bgfx::createUniform("resolution", bgfx::UniformType::Vec4);
 
 	bgfx::setViewName(0, "skybox");
 	bgfx::setViewName(1, "atmosphere");
@@ -112,8 +111,6 @@ void BaseApplication::run()
 		//todo : fix cam position
 		float eyeUniform[4] = { temp[0], temp[1],temp[2], t};
 		bgfx::setUniform(cameraPosition, eyeUniform);
-		float resUniform[4] = { m_width, m_height, 0, 0};
-		bgfx::setUniform(resolution, resUniform);
 
 		
 		float proj[16];
@@ -136,7 +133,7 @@ void BaseApplication::run()
 		sky.renderSkybox(skybox_program);
 		//bx::mtxRotateXY(mtx, 0, t);
 		float atmoMtx[16];
-		bx::mtxScale(atmoMtx, 3.2, 3.2, 3.2);
+		bx::mtxScale(atmoMtx, 3.5, 3.5, 3.5);
 		//transform for atmosphere
 		atmo->submit(1, atmo_program, atmoMtx, state);
 		//bgfx::setTexture(0, s_planet_texture, planet_texture_day);
