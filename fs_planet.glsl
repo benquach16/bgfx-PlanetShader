@@ -4,23 +4,24 @@ $input v_pos, v_view, v_normal, v_color0, v_texcoord0
 #include "./common/common.sh"
 
 uniform vec4 cameraPosition;
-vec3 lightPosition = vec3(-4.0, 5.0, .0);
+vec3 lightPosition = vec3(0.0, 0.0, -50.0);
 
 SAMPLER2D(tex, 0);
 
 void main()
 {
+	lightPosition = mul(u_view, vec4(lightPosition, 1.0)).xyz;
 	vec3 normal = normalize(v_normal);
 	vec3 viewDirection = -normalize(v_view);
+	//viewDirection = normalize(v_pos - cameraPosition.xyz);
 	vec3 vertexPosition = v_pos;
 
-	//vec3 lightDirection = normalize(lightPosition - vertexPosition);
-	vec3 lightDirection = normalize(lightPosition - cameraPosition.xyz);
+	vec3 lightDirection = normalize(lightPosition - vertexPosition);
 	//viewDirection = normalize(viewDirection - vertexPosition);
 
 	//apply lamberts cosine law
 	vec4 col = vec4(0.3,0.7, 0.4, 1.0);
-	vec4 ambient = vec4(0.01,0.01,0.01,1.0);
+	vec4 ambient = vec4(0.2,0.2,0.2,1.0);
 	col = col * max(dot(normal, lightDirection), 0.0);
 
 
@@ -43,7 +44,9 @@ void main()
 	float attenuation = 1.0;
 	
     vec4 texDay = toLinearAccurate(texture2D(tex, v_texcoord0.xy));
-	//vec4 texDay = texture2D(s_planet_texture_day, v_texcoord0.xy);
+	//vec4 texDay = texture2D(tex, v_texcoord0.xy);
+	ambient *= texDay;
+
 	texDay = texDay * max(dot(normal, lightDirection), 0.0);
 	//tex = tex * max(dot(normal, lightDirection), 0.0);
 	vec4 finalColor = texDay;

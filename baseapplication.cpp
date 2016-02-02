@@ -105,7 +105,7 @@ void BaseApplication::run()
 
 		float mouseMtx[16];
 		bx::mtxRotateXY(mouseMtx, 0, t);
-		t+=0.001f;
+		t+=0.01f;
 		float temp[4];
 		bx::vec3MulMtx(temp, eye, mouseMtx);
 		bx::mtxLookAt(view,temp, at);
@@ -136,7 +136,7 @@ void BaseApplication::run()
 		sky.renderSkybox(skybox_program);
 		//bx::mtxRotateXY(mtx, 0, t);
 		float atmoMtx[16];
-		bx::mtxScale(atmoMtx, 4.0, 4.0, 4.0);
+		bx::mtxScale(atmoMtx, 3.2, 3.2, 3.2);
 		//transform for atmosphere
 		atmo->submit(1, atmo_program, atmoMtx, state);
 		//bgfx::setTexture(0, s_planet_texture, planet_texture_day);

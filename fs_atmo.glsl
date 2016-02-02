@@ -17,18 +17,18 @@ const float G_M = -0.85;// Mie g
 const float G_M2 = G_M*G_M;
 
 const float R = 2.4;
-const float R_INNER = 2.15;
+const float R_INNER = 2.2;
 const float SCALE_L = 1.0 / ( R - R_INNER ); //fScale
 const float SCALE = 0.25;
 
 const float SCALEDEPTH = 0.25;
 const float SCALEOVERDEPTH = SCALE_L / SCALEDEPTH;
 
-const int NUM_OUT_SCATTER = 10;
-const float FNUM_OUT_SCATTER = 10.0;
+const int NUM_OUT_SCATTER = 20;
+const float FNUM_OUT_SCATTER = 20.0;
 
-const int NUM_IN_SCATTER = 10;
-const float FNUM_IN_SCATTER = 10.0;
+const int NUM_IN_SCATTER = 20;
+const float FNUM_IN_SCATTER = 20.0;
 
 
 // ray direction
@@ -93,7 +93,7 @@ float scatteringCalc(vec3 v1, vec3 v2)
 }
 
 
-vec3 lightPosition = vec3(-4.0, 5.0, 0.0);
+vec3 lightPosition = vec3(0.0, 0.0, -7.0);
 uniform vec4 cameraPosition;
 uniform vec4 resolution;
 
@@ -129,6 +129,7 @@ void main()
 	
 	// sun light dir
 	vec3 lightDirection = normalize(v_pos - lightPosition);
+	//lightDirection = -normalize(lightPosition - cameraPosition.xyz);
 	float cameraHeight = length(eye);
 
 	float fFar = length(startingRay);
@@ -171,7 +172,10 @@ void main()
 	}
 	finalColor *= sampleLength * SCALE_L;
 	finalColor = finalColor * ( K_R * C_R * getRayleighPhase( lightAngle2 ) + K_M * getMiePhase( lightAngle, lightAngle2, G_M, G_M2 ) ) * E;
+
+
 	float avg = (finalColor.x + finalColor.y + finalColor.z) /3;
+	
 	gl_FragColor = vec4( finalColor, avg );
 	
 }
