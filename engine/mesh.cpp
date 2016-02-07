@@ -175,7 +175,13 @@ void Mesh::addTexture(const char* _name, uint32_t _flags)
 	m_textures.push_back(newTexture);
 }
 
-
+void Mesh::setTexture(int _index, const char* _name, uint32_t _flags)
+{
+	int stage = _index;
+	Texture *newTexture = new Texture(stage);
+	newTexture->loadTexture(_name, _flags);
+	m_textures.push_back(newTexture);	
+}
 
 
 

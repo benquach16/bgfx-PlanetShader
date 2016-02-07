@@ -77,7 +77,7 @@ public:
 	void load(bx::ReaderSeekerI* _reader);
 	void submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, uint64_t _state = BGFX_STATE_MASK);
 	void addTexture(const char* _name, uint32_t _flags);
-	void addTexture(bgfx::TextureHandle _texture);
+	void setTexture(int _index, const char* _name, uint32_t _flags);
 	//todo: move vector3d into here
 	//do all matrix multiplcation within classes
 protected:

@@ -49,6 +49,15 @@ PosColorTexCoord0Vertex southface[4] = //heh
 	{ 1.0f, -1.0f, -1.0f, 1.0, 1.0},
 };
 
+const uint16_t southface_indices[6] =
+{
+	2, 1, 0,
+	2, 3, 1,
+};
+
+
+
+
 static PosColorTexCoord0Vertex s_cubeVertices[8] =
 {
 	{-1.0f,  1.0f,  1.0f, 0, 0},

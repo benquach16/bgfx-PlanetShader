@@ -23,7 +23,13 @@ public:
 	~Skybox();
 	void setupSkybox();
 	void renderSkybox(bgfx::ProgramHandle program);
-
+	void setTexture(
+		const char* north_tex,
+		const char* south_tex,
+		const char* west_tex,
+		const char* east_tex,
+		const char* top_tex,
+		const char* bottom_tex);
 protected:
 	bgfx::VertexBufferHandle m_vbh;
 	bgfx::IndexBufferHandle m_ibh;
