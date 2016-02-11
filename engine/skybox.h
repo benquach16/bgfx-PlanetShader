@@ -33,6 +33,13 @@ public:
 protected:
 	bgfx::VertexBufferHandle m_vbh;
 	bgfx::IndexBufferHandle m_ibh;
+
+	//lots of buffers here
+	bgfx::VertexBufferHandle m_verts_northface;
+	bgfx::IndexBufferHandle m_indices_northface;
+
+	bgfx::VertexBufferHandle m_verts_southface;
+	bgfx::IndexBufferHandle m_indices_southface;	
 	Texture m_texture;
 };
 

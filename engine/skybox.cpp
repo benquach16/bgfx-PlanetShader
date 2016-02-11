@@ -37,11 +37,11 @@ PosColorTexCoord0Vertex northface[4] = //heh
 
 const uint16_t northface_indices[6] =
 {
-	2, 1, 0,
-	2, 3, 1,
+	0, 1, 2,
+	1, 3, 2,
 };
 
-PosColorTexCoord0Vertex southface[4] = //heh
+PosColorTexCoord0Vertex southface[4] = 
 {
 	{-1.0f,  1.0f, -1.0f, 0, 0 },
 	{ 1.0f,  1.0f, -1.0f, 1.0, 0 },
@@ -54,6 +54,8 @@ const uint16_t southface_indices[6] =
 	2, 1, 0,
 	2, 3, 1,
 };
+
+
 
 
 
@@ -89,6 +91,7 @@ static const uint16_t s_cubeIndices[36] =
 
 Skybox::~Skybox()
 {
+	bgfx::destroyVertexBuffer(m_vbh);
 	bgfx::destroyIndexBuffer(m_ibh);
 }
 
