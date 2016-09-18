@@ -26,7 +26,7 @@ all: baseapplication.o programloader.o mesh.o texture.o memory.o makeshaders ind
 baseapplication.o: baseapplication.h baseapplication.cpp 
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c
 
-programloader.o: programloader.h programloader.cpp
+programloader.o: engine/programloader.h engine/programloader.cpp
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.cpp -c
 
 stb_image.o: libraries/stb/stb_image.c

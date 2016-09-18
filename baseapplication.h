@@ -20,7 +20,7 @@
 #include "engine/mesh.h"
 #include "engine/texture.h"
 #include "engine/skybox.h"
-#include "programloader.h"
+#include "engine/programloader.h"
 
 class BaseApplication
 {
@@ -29,13 +29,15 @@ public:
 	BaseApplication();
 	~BaseApplication();
 
+	void setupViews();
 	void run();
 
 protected:
 	SDL_Window *m_mainWindow;
 	int m_width;
 	int m_height;
-
+	float m_distance;
+	float m_rotate;
 	ProgramLoader m_programloader;
 };
 

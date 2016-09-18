@@ -16,7 +16,7 @@
 #include <bgfx/bgfx.h>
 #include <bx/uint32_t.h>
 
-#include "engine/memory.h"
+#include "memory.h"
 
 
 class ProgramLoader
