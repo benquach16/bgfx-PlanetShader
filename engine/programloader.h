@@ -11,6 +11,7 @@
 #include <bx/handlealloc.h>
 #include <bx/readerwriter.h>
 #include <bx/string.h>
+#include <bx/crtimpl.h>
 
 
 #include <bgfx/bgfx.h>
