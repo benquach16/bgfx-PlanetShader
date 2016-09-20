@@ -27,7 +27,10 @@ baseapplication.o: baseapplication.h baseapplication.cpp
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c
 
 programloader.o: engine/programloader.h engine/programloader.cpp
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.cpp -c
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/programloader.cpp -c
+
+programhandler.o: engine/programhandler.h engine/programhandler.cpp
+	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/programhandler.cpp -c
 
 stb_image.o: libraries/stb/stb_image.c
 	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) libraries/stb/stb_image.c -c
