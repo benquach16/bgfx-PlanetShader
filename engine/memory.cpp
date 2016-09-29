@@ -1,5 +1,5 @@
 #include "memory.h"
-
+#include <iostream>
 
 const bgfx::Memory* loadMem(bx::FileReaderI* _reader, const char* _filePath)
 {
@@ -12,7 +12,7 @@ const bgfx::Memory* loadMem(bx::FileReaderI* _reader, const char* _filePath)
 		mem->data[mem->size-1] = '\0';
 		return mem;
 	}
-
+	std::cerr << "Failed to load file: " << _filePath << std::endl;
 	return NULL;
 }
 
