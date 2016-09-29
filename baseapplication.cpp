@@ -86,7 +86,7 @@ void BaseApplication::run()
 	//bgfx examples is complicated
 	setupWindow();
 
-	bgfx::renderFrame();
+	//bgfx::renderFrame();
 
 
 	uint32_t debug = BGFX_DEBUG_TEXT;

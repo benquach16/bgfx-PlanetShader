@@ -3,7 +3,7 @@
 
 const bgfx::Memory* loadMem(bx::FileReaderI* _reader, const char* _filePath)
 {
-	if (0 == bx::open(_reader, _filePath) )
+	if ( bx::open(_reader, _filePath) )
 	{
 		uint32_t size = (uint32_t)bx::getSize(_reader);
 		const bgfx::Memory* mem = bgfx::alloc(size+1);
@@ -18,7 +18,7 @@ const bgfx::Memory* loadMem(bx::FileReaderI* _reader, const char* _filePath)
 
 void* loadMem(bx::FileReaderI* _reader, bx::AllocatorI* _allocator, const char* _filePath, uint32_t* _size)
 {
-	if (0 == bx::open(_reader, _filePath) )
+	if (bx::open(_reader, _filePath) )
 	{
 		uint32_t size = (uint32_t)bx::getSize(_reader);
 		void* data = BX_ALLOC(_allocator, size);
