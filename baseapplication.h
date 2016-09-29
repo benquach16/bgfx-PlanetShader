@@ -28,7 +28,7 @@ public:
 	bgfx::ProgramHandle loadProgram(const char* _vsName, const char* _fsName);
 	BaseApplication();
 	~BaseApplication();
-
+	void setupWindow();
 	void setupViews();
 	void run();
 
@@ -39,6 +39,8 @@ protected:
 	float m_distance;
 	float m_rotate;
 	ProgramLoader m_programloader;
+	
+	bgfx::UniformHandle cameraPosition;
 };
 
 

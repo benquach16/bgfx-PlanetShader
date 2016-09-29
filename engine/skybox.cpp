@@ -109,6 +109,10 @@ void Skybox::setupSkybox()
 		bgfx::makeRef(s_cubeIndices, sizeof(s_cubeIndices) )
 		);
 
+	bgfx::createVertexBuffer(bgfx::makeRef(s_cubeVertices, sizeof(s_cubeVertices) )
+		, PosColorTexCoord0Vertex::ms_decl
+		);
+
 	//load a texture here
 	m_texture.setStage(0);
 	m_texture.loadTexture("space.png",  0 | BGFX_TEXTURE_U_MIRROR

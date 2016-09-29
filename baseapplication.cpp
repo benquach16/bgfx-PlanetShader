@@ -8,6 +8,8 @@ BaseApplication::BaseApplication() : m_mainWindow(0)
 {
 	m_width = 1280;
 	m_height = 800;
+	m_distance = -7.0f;
+	m_rotate = 1.0f;
 }
 
 BaseApplication::~BaseApplication()
@@ -18,12 +20,9 @@ BaseApplication::~BaseApplication()
 	SDL_Quit();
 }
 
-void BaseApplication::run()
-{
 
-	//do everything in a single thread for now
-	//because multithreading is hard and setting up everything in the
-	//bgfx examples is complicated
+void BaseApplication::setupWindow()
+{
 	SDL_Init(0 | SDL_INIT_VIDEO | SDL_INIT_GAMECONTROLLER);
 	m_mainWindow = SDL_CreateWindow("rendertest"
 									, SDL_WINDOWPOS_UNDEFINED
@@ -32,10 +31,63 @@ void BaseApplication::run()
 									, m_height
 									, SDL_WINDOW_SHOWN
 									| SDL_WINDOW_RESIZABLE);
+	SDL_SysWMinfo wmi;
+	SDL_VERSION(&wmi.version);
+	if(!SDL_GetWindowWMInfo(m_mainWindow, &wmi))
+	{
 
-	bgfx::sdlSetWindow(m_mainWindow);
-	bgfx::renderFrame();
+	}
+
+	bgfx::PlatformData pd;
+	pd.ndt = wmi.info.x11.display;
+	pd.nwh = (void*)(uintptr_t)wmi.info.x11.window;
+	pd.context = NULL;
+	pd.backBuffer = NULL;
+	pd.backBufferDS = NULL;
+	bgfx::setPlatformData(pd);
 	bgfx::init( bgfx::RendererType::OpenGL);
+	//bgfx::sdlSetWindow(m_mainWindow);
+}
+
+
+//call to set up view rects
+void BaseApplication::setupViews()
+{
+	//refactor me
+	float at[3]  = { 0.0f, 0.0f,  0.0f };
+	float eye[3] = { 0.0f, 0.0f, m_distance };
+	float view[16];
+
+	float mouseMtx[16];
+	bx::mtxRotateXY(mouseMtx, 0, m_rotate);
+	m_rotate+=0.001f;
+	float temp[4];
+	bx::vec3MulMtx(temp, eye, mouseMtx);
+	bx::mtxLookAt(view,temp, at);
+	//todo : fix cam position
+	float eyeUniform[4] = { temp[0], temp[1],temp[2], m_rotate};
+	bgfx::setUniform(cameraPosition, eyeUniform);
+	float proj[16];
+	bx::mtxProj(proj, 60.0f, float(m_width)/float(m_height), 0.1f, 100.0f);
+	bgfx::setViewRect(0, 0, 0, m_width, m_height);
+	bgfx::setViewTransform(0, view, proj);
+	bgfx::setViewRect(1, 0, 0, m_width, m_height);
+	bgfx::setViewTransform(1,view,proj);
+	bgfx::setViewRect(2, 0, 0, m_width, m_height);
+	bgfx::setViewTransform(2,view,proj);
+	bgfx::touch(0);
+}
+
+void BaseApplication::run()
+{
+
+	//do everything in a single thread for now
+	//because multithreading is hard and setting up everything in the
+	//bgfx examples is complicated
+	setupWindow();
+
+	bgfx::renderFrame();
+
 
 	uint32_t debug = BGFX_DEBUG_TEXT;
 	uint32_t reset = BGFX_RESET_VSYNC;
@@ -56,7 +108,7 @@ void BaseApplication::run()
 
 	//needed to pass information to shader
 	bgfx::UniformHandle skybox = bgfx::createUniform("skybox", bgfx::UniformType::Int1);
-	bgfx::UniformHandle cameraPosition = bgfx::createUniform("cameraPosition", bgfx::UniformType::Vec4);
+	cameraPosition = bgfx::createUniform("cameraPosition", bgfx::UniformType::Vec4);
 	bgfx::UniformHandle lightPosition = bgfx::createUniform("lightPosition", bgfx::UniformType::Vec4);
 
 	bgfx::setViewName(0, "skybox");
@@ -81,13 +133,12 @@ void BaseApplication::run()
 
 	Skybox sky;
 	sky.setupSkybox();
-	float t = 1;
 
 	int oldmouseX = 0;
 	int oldmouseY = 0;
 	int mouseX = 0;
 	int mouseY = 0;
-	float distance = -7.0f;
+
 	while (!exit)
 	{
 
@@ -95,40 +146,11 @@ void BaseApplication::run()
 		bgfx::dbgTextClear();
 		bgfx::dbgTextPrintf(0, 1, 0x4f, "Planet");
 		bgfx::dbgTextPrintf(0, 2, 0x6f, "Description: Initialization and debug text.");
-
-		
-		float at[3]  = { 0.0f, 0.0f,  0.0f };
-		float eye[3] = { 0.0f, 0.0f, distance };
-
-		float view[16];
-
-		float mouseMtx[16];
-		bx::mtxRotateXY(mouseMtx, 0, t);
-		t+=0.001f;
-		float temp[4];
-		bx::vec3MulMtx(temp, eye, mouseMtx);
-		bx::mtxLookAt(view,temp, at);
-		//todo : fix cam position
-		float eyeUniform[4] = { temp[0], temp[1],temp[2], t};
-		bgfx::setUniform(cameraPosition, eyeUniform);
-
-		
-		float proj[16];
-		bx::mtxProj(proj, 60.0f, float(m_width)/float(m_height), 0.1f, 100.0f);
-		// Set view 0 default viewport.
-		bgfx::setViewRect(0, 0, 0, m_width, m_height);
-		bgfx::setViewTransform(0, view, proj);
-		bgfx::setViewRect(1, 0, 0, m_width, m_height);
-		bgfx::setViewTransform(1,view,proj);
-		bgfx::setViewRect(2, 0, 0, m_width, m_height);
-		bgfx::setViewTransform(2,view,proj);
-   		bgfx::touch(0);
-
-		//transform for planet
 		float mtx[16];
 
 		bx::mtxScale(mtx, 3, 3, 3);
 
+		setupViews();
 
 		sky.renderSkybox(skybox_program);
 		//bx::mtxRotateXY(mtx, 0, t);
@@ -152,11 +174,11 @@ void BaseApplication::run()
 			{
 				if(event.key.keysym.sym == SDLK_z)
 				{
-					distance -= 0.5;
+					m_distance -= 0.5;
 				}
 				else if(event.key.keysym.sym == SDLK_a)
 				{
-					distance += 0.5;
+					m_distance += 0.5;
 				}
 				else
 				{

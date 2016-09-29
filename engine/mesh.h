@@ -8,6 +8,7 @@
 #include <bx/fpumath.h>
 #include <bx/readerwriter.h>
 #include <bx/string.h>
+#include <bx/crtimpl.h>
 #include <vector>
 #include <string>
 #include "texture.h"

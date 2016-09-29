@@ -5,7 +5,7 @@
 #include <bx/readerwriter.h>
 #include <bgfx/bgfxplatform.h>
 #include <bgfx/bgfxdefines.h>
-
+#include <bx/crtimpl.h>
 #include "memory.h"
 
 

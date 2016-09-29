@@ -14,7 +14,7 @@ Mesh::~Mesh()
 
 namespace bgfx
 {
-	int32_t read(bx::ReaderI* _reader, bgfx::VertexDecl& _decl);
+	int32_t read(bx::ReaderI* _reader, bgfx::VertexDecl& _decl, bx::Error* _err = NULL);
 }
 
 void Mesh::load(bx::ReaderSeekerI* _reader)

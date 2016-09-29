@@ -46,7 +46,7 @@ void Texture::loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgf
 
 		if (NULL != img)
 		{
-			handle = bgfx::createTexture2D(uint16_t(width), uint16_t(height), 1
+			handle = bgfx::createTexture2D(uint16_t(width), uint16_t(height), false, 1
 										   , bgfx::TextureFormat::RGBA8
 										   , _flags
 										   , bgfx::copy(img, width*height*4)
@@ -60,6 +60,7 @@ void Texture::loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgf
 									  , uint16_t(width)
 									  , uint16_t(height)
 									  , 0
+									  , false
 									  , false
 									  , 1
 									  , bgfx::TextureFormat::RGBA8
