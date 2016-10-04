@@ -1,8 +1,8 @@
 #include dirs go here
 #this should point to BGFX directory
 #theoretically the only thing you need to change
-BGFX_DIRECTORY=/home/ben/bgfx/
-BX_DIRECTORY=/home/ben/bx/
+BGFX_DIRECTORY=../bgfx/
+BX_DIRECTORY=../bx/
 
 
 INCLUDES=-I$(BGFX_DIRECTORY)include/ -I$(BX_DIRECTORY)include/ -I$(BGFX_DIRECTORY)3rdparty
