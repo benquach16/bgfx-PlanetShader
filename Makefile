@@ -3,10 +3,11 @@
 #theoretically the only thing you need to change
 BGFX_DIRECTORY=../bgfx/
 BX_DIRECTORY=../bx/
+BIMG_DIRECTORY=../bimg/
 
 
 INCLUDES=-I$(BGFX_DIRECTORY)include/ -I$(BX_DIRECTORY)include/ -I$(BGFX_DIRECTORY)3rdparty
-LIBRARIES=-L$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src
+LIBRARIES=-L$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src -L$(BX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bx/src
 GCC=g++
 SHADERC=$(BGFX_DIRECTORY)/tools/bin/linux/shaderc
 GEOMETRYC=$(BGFX_DIRECTORY)/toosl/bin/linux/geometryc
@@ -17,38 +18,40 @@ USERCXXFLAGS= -g -std=c++14
 LIBS= -lrt -ldl -lX11 -lGL -lGLU -lpthread -lSDL2 
 #linking each file cause there are dx11 references
 BGFX_ALL=$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src/*.o
+BX_ALL=$(BX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bx/src/*.o
+BIMG_ALL=$(BIMG_DIRECTORY).build/linux64_gcc/obj/x64/Release/bimg/src/*.o
 LDFLAGS += $(LIBRARIES)
 LDFLAGS += -static 
 
 all: baseapplication.o programloader.o mesh.o texture.o memory.o makeshaders indexbufferdecompression.o skybox.o
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o memory.o texture.o mesh.o indexbufferdecompression.o skybox.o main.cpp -o renderer
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o memory.o texture.o mesh.o indexbufferdecompression.o skybox.o main.cpp -o renderer
 
 baseapplication.o: baseapplication.h baseapplication.cpp 
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c
 
 programloader.o: engine/programloader.h engine/programloader.cpp
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/programloader.cpp -c
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/programloader.cpp -c
 
 programhandler.o: engine/programhandler.h engine/programhandler.cpp
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/programhandler.cpp -c
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/programhandler.cpp -c
 
 stb_image.o: libraries/stb/stb_image.c
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) libraries/stb/stb_image.c -c
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) libraries/stb/stb_image.c -c
 
 indexbufferdecompression.o: libraries/ib-compress/indexbufferdecompression.h libraries/ib-compress/indexbufferdecompression.cpp
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) libraries/ib-compress/indexbufferdecompression.cpp -c
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) libraries/ib-compress/indexbufferdecompression.cpp -c
 
 memory.o: engine/memory.h engine/memory.cpp
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/memory.cpp -c
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/memory.cpp -c
 
 mesh.o: engine/mesh.h engine/mesh.cpp
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/mesh.cpp -c
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/mesh.cpp -c
 
 texture.o: engine/texture.h engine/texture.cpp
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/texture.cpp -c
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/texture.cpp -c
 
 skybox.o: engine/skybox.h engine/skybox.cpp
-	$(GCC) $(USERCXXFLAGS) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/skybox.cpp -c
+	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) engine/skybox.cpp -c
 
 
 

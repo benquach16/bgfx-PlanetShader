@@ -3,8 +3,8 @@
 
 #include <bgfx/bgfx.h>
 #include <bx/readerwriter.h>
-#include <bgfx/bgfxplatform.h>
-#include <bgfx/bgfxdefines.h>
+#include <bgfx/platform.h>
+#include <bgfx/defines.h>
 #include <bx/crtimpl.h>
 #include "memory.h"
 

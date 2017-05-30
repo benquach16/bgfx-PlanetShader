@@ -3,8 +3,8 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
-#include <bgfx/bgfxplatform.h>
-#include <bgfx/bgfxdefines.h>
+#include <bgfx/platform.h>
+#include <bgfx/defines.h>
 
 #include <stdio.h>
 #include <bx/handlealloc.h>

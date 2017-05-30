@@ -4,7 +4,7 @@
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_syswm.h>
 #include <stdio.h>
-#include <bgfx/bgfxplatform.h>
+#include <bgfx/platform.h>
 
 #include <bgfx/bgfx.h>
 #include <bx/handlealloc.h>

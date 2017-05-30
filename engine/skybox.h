@@ -2,8 +2,8 @@
 #define __SKYBOX_H__
 
 #include <bgfx/bgfx.h>
-#include <bgfx/bgfxplatform.h>
-#include <bgfx/bgfxdefines.h>
+#include <bgfx/platform.h>
+#include <bgfx/defines.h>
 
 #include <bx/handlealloc.h>
 #include <bx/fpumath.h>
