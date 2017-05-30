@@ -9,7 +9,11 @@ Feel free to steal makefile if you don't use GENIe with bgfx and just want to co
 Dependencies
 ------------
 
-bgfx (https://github.com/bkaradzic/bgfx) 
+bgfx (https://github.com/bkaradzic/bgfx)
+
+bx
+
+bimg
 
 SDL
 
