@@ -5,10 +5,10 @@
 #include <bgfx/platform.h>
 #include <bgfx/defines.h>
 #include <bx/commandline.h>
-#include <bx/fpumath.h>
 #include <bx/readerwriter.h>
+#include <bx/file.h>
+#include <bx/math.h>
 #include <bx/string.h>
-#include <bx/crtimpl.h>
 #include <vector>
 #include <string>
 #include "texture.h"
@@ -57,8 +57,8 @@ struct Group
 
 	void reset()
 		{
-			m_vbh.idx = bgfx::invalidHandle;
-			m_ibh.idx = bgfx::invalidHandle;
+			m_vbh.idx = bgfx::kInvalidHandle;
+			m_ibh.idx = bgfx::kInvalidHandle;
 			m_prims.clear();
 		}
 

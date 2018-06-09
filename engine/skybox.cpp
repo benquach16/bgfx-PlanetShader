@@ -32,7 +32,7 @@ PosColorTexCoord0Vertex northface[4] = //heh
 	{-1.0f,  1.0f,  1.0f, 0, 0},
 	{ 1.0f,  1.0f,  1.0f, 1.0, 0 },
 	{-1.0f, -1.0f,  1.0f, 0, 1.0 },
-	{ 1.0f, -1.0f,  1.0f, 1.0, 1.0 },	
+	{ 1.0f, -1.0f,  1.0f, 1.0, 1.0 },
 };
 
 const uint16_t northface_indices[6] =
@@ -41,7 +41,7 @@ const uint16_t northface_indices[6] =
 	1, 3, 2,
 };
 
-PosColorTexCoord0Vertex southface[4] = 
+PosColorTexCoord0Vertex southface[4] =
 {
 	{-1.0f,  1.0f, -1.0f, 0, 0 },
 	{ 1.0f,  1.0f, -1.0f, 1.0, 0 },
@@ -66,7 +66,7 @@ static PosColorTexCoord0Vertex s_cubeVertices[8] =
 	{ 1.0f,  1.0f,  1.0f, 1.0, 0 },
 	{-1.0f, -1.0f,  1.0f, 0, 1.0 },
 	{ 1.0f, -1.0f,  1.0f, 1.0, 1.0 },
-	
+
 	{-1.0f,  1.0f, -1.0f, 1.0, 0 },
 	{ 1.0f,  1.0f, -1.0f, 0, 0 },
 	{-1.0f, -1.0f, -1.0f, 1.0, 1.0 },
@@ -91,8 +91,8 @@ static const uint16_t s_cubeIndices[36] =
 
 Skybox::~Skybox()
 {
-	bgfx::destroyVertexBuffer(m_vbh);
-	bgfx::destroyIndexBuffer(m_ibh);
+	bgfx::destroy(m_vbh);
+	bgfx::destroy(m_ibh);
 }
 
 void Skybox::setupSkybox()
@@ -129,7 +129,7 @@ void Skybox::renderSkybox(bgfx::ProgramHandle program)
 	float mtx[16];
 	bx::mtxScale(mtx, 8, 8, 8);
 	bgfx::setTransform(mtx);
-	bgfx::setVertexBuffer(m_vbh);
+	bgfx::setVertexBuffer(0, m_vbh);
 	bgfx::setIndexBuffer(m_ibh);
 	bgfx::setState(BGFX_STATE_DEFAULT);
 	m_texture.setTexture();

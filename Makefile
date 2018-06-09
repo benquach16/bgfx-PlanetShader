@@ -9,24 +9,24 @@ BIMG_DIRECTORY=../bimg/
 INCLUDES=-I$(BGFX_DIRECTORY)include/ -I$(BX_DIRECTORY)include/ -I$(BGFX_DIRECTORY)3rdparty
 LIBRARIES=-L$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src -L$(BX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bx/src
 GCC=g++
-SHADERC=$(BGFX_DIRECTORY)/tools/bin/linux/shaderc
-GEOMETRYC=$(BGFX_DIRECTORY)/toosl/bin/linux/geometryc
+SHADERC=$(BGFX_DIRECTORY)tools/bin/linux/shaderc
+GEOMETRYC=$(BGFX_DIRECTORY)toosl/bin/linux/geometryc
 USERCXXFLAGS= -g -std=c++14
 
 #make sure we have XLIB and SDL2 packages first!!!
 #if you do not please use your package manager to install them
-LIBS= -lrt -ldl -lX11 -lGL -lGLU -lpthread -lSDL2 
+LIBS= -lrt -ldl -lX11 -lGL -lGLU -lpthread -lSDL2
 #linking each file cause there are dx11 references
 BGFX_ALL=$(BGFX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bgfx/src/*.o
 BX_ALL=$(BX_DIRECTORY).build/linux64_gcc/obj/x64/Release/bx/src/*.o
 BIMG_ALL=$(BIMG_DIRECTORY).build/linux64_gcc/obj/x64/Release/bimg/src/*.o
 LDFLAGS += $(LIBRARIES)
-LDFLAGS += -static 
+LDFLAGS += -static
 
 all: baseapplication.o programloader.o mesh.o texture.o memory.o makeshaders indexbufferdecompression.o skybox.o
 	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) programloader.o baseapplication.o memory.o texture.o mesh.o indexbufferdecompression.o skybox.o main.cpp -o renderer
 
-baseapplication.o: baseapplication.h baseapplication.cpp 
+baseapplication.o: baseapplication.h baseapplication.cpp
 	$(GCC) $(USERCXXFLAGS) $(BIMG_ALL) $(BX_ALL) $(LIBS) $(INCLUDES) $(BGFX_ALL) baseapplication.cpp -c
 
 programloader.o: engine/programloader.h engine/programloader.cpp
@@ -60,7 +60,7 @@ makeshaders: makeshadervert makeshaderfrag
 makeshadervert: vs_planet.glsl vs_atmo.glsl vs_skybox.glsl
 	$(SHADERC) -f vs_planet.glsl -o shaders/glsl/vs_planet.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
 	$(SHADERC) -f vs_atmo.glsl -o shaders/glsl/vs_atmo.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
-	$(SHADERC) -f vs_skybox.glsl -o shaders/glsl/vs_skybox.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose	
+	$(SHADERC) -f vs_skybox.glsl -o shaders/glsl/vs_skybox.bin --type vertex --platform linux -p 120 --varyingdef varying.def.sc --verbose
 
 makeshaderfrag: fs_planet.glsl fs_atmo.glsl
 	$(SHADERC) -f fs_planet.glsl -o shaders/glsl/fs_planet.bin --type fragment --platform linux -p 120 --varyingdef varying.def.sc --verbose

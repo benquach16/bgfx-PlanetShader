@@ -6,8 +6,8 @@
 #include <bgfx/defines.h>
 
 #include <bx/handlealloc.h>
-#include <bx/fpumath.h>
 #include <bx/readerwriter.h>
+#include <bx/math.h>
 #include <bx/string.h>
 
 #include "texture.h"
@@ -19,7 +19,7 @@
 class Skybox
 {
 public:
-	
+
 	~Skybox();
 	void setupSkybox();
 	void renderSkybox(bgfx::ProgramHandle program);
@@ -39,7 +39,7 @@ protected:
 	bgfx::IndexBufferHandle m_indices_northface;
 
 	bgfx::VertexBufferHandle m_verts_southface;
-	bgfx::IndexBufferHandle m_indices_southface;	
+	bgfx::IndexBufferHandle m_indices_southface;
 	Texture m_texture;
 };
 

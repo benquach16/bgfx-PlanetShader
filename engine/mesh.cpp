@@ -28,9 +28,9 @@ void Mesh::load(bx::ReaderSeekerI* _reader)
 	using namespace bgfx;
 	Group group;
 
-		
-	//bx::AllocatorI* allocator = new bx::CrtAllocator;
-	bx::CrtAllocator allocator;
+
+	//bx::AllocatorI* allocator = new bx::DefaultAllocator;
+	bx::DefaultAllocator allocator;
 	uint32_t chunk;
 	while (4 == bx::read(_reader, chunk) )
 	{
@@ -141,9 +141,9 @@ void Mesh::submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, 
 	if (BGFX_STATE_MASK == _state)
 	{
 		_state = 0
-			| BGFX_STATE_RGB_WRITE
-			| BGFX_STATE_ALPHA_WRITE
-			| BGFX_STATE_DEPTH_WRITE
+			| BGFX_STATE_WRITE_RGB
+			| BGFX_STATE_WRITE_A
+			| BGFX_STATE_WRITE_Z
 			| BGFX_STATE_DEPTH_TEST_LESS
 			| BGFX_STATE_CULL_CCW
 			| BGFX_STATE_MSAA
@@ -160,7 +160,7 @@ void Mesh::submit(uint8_t _id, bgfx::ProgramHandle _program, const float* _mtx, 
 		const Group& group = *it;
 		bgfx::setTransform(cached);
 		bgfx::setIndexBuffer(group.m_ibh);
-		bgfx::setVertexBuffer(group.m_vbh);
+		bgfx::setVertexBuffer(0, group.m_vbh);
 		bgfx::setState(_state);
 		bgfx::submit(_id, _program);
 	}
@@ -180,7 +180,7 @@ void Mesh::setTexture(int _index, const char* _name, uint32_t _flags)
 	int stage = _index;
 	Texture *newTexture = new Texture(stage);
 	newTexture->loadTexture(_name, _flags);
-	m_textures.push_back(newTexture);	
+	m_textures.push_back(newTexture);
 }
 
 
@@ -195,7 +195,7 @@ Mesh* meshLoad(bx::ReaderSeekerI* _reader)
 Mesh* meshLoad(const char* _filePath)
 {
 
-	bx::CrtFileReader reader;
+	bx::FileReader reader;
 	bx::open(&reader, _filePath);
 	Mesh* mesh = meshLoad(&reader);
 	bx::close(&reader);
