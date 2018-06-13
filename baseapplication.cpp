@@ -2,8 +2,6 @@
 #include "baseapplication.h"
 
 
-
-
 BaseApplication::BaseApplication() : m_mainWindow(0)
 {
 	m_width = 1280;
@@ -45,7 +43,9 @@ void BaseApplication::setupWindow()
 	pd.backBuffer = NULL;
 	pd.backBufferDS = NULL;
 	bgfx::setPlatformData(pd);
-	bgfx::init( bgfx::RendererType::OpenGL);
+	bgfx::Init init;
+	init.type = bgfx::RendererType::OpenGL;
+	bgfx::init(init);
 	//bgfx::sdlSetWindow(m_mainWindow);
 }
 
@@ -68,7 +68,7 @@ void BaseApplication::setupViews()
 	float eyeUniform[4] = { temp[0], temp[1],temp[2], m_rotate};
 	bgfx::setUniform(cameraPosition, eyeUniform);
 	float proj[16];
-	bx::mtxProj(proj, 60.0f, float(m_width)/float(m_height), 0.1f, 100.0f);
+	bx::mtxProj(proj, 60.0f, float(m_width)/float(m_height), 0.1f, 100.0f, true);
 	bgfx::setViewRect(0, 0, 0, m_width, m_height);
 	bgfx::setViewTransform(0, view, proj);
 	bgfx::setViewRect(1, 0, 0, m_width, m_height);
@@ -114,11 +114,11 @@ void BaseApplication::run()
 	bgfx::setViewName(0, "skybox");
 	bgfx::setViewName(1, "atmosphere");
 	bgfx::setViewName(2, "planet");
-	
+
 	uint64_t state = 0
-		| BGFX_STATE_RGB_WRITE
-		| BGFX_STATE_ALPHA_WRITE
-		| BGFX_STATE_DEPTH_WRITE
+		| BGFX_STATE_WRITE_RGB
+		| BGFX_STATE_WRITE_A
+		| BGFX_STATE_WRITE_Z
 		| BGFX_STATE_BLEND_ALPHA
 		| BGFX_STATE_CULL_CCW
 		| BGFX_STATE_MSAA;
@@ -126,7 +126,7 @@ void BaseApplication::run()
 	bgfx::ProgramHandle atmo_program = m_programloader.loadProgram("vs_atmo", "fs_atmo");
 	bgfx::ProgramHandle skybox_program = m_programloader.loadProgram("vs_skybox", "fs_skybox");
 	Mesh *mesh = meshLoad("sphere.bin");
-	Mesh *atmo = meshLoad("sphere.bin");	
+	Mesh *atmo = meshLoad("sphere.bin");
 	mesh->addTexture("mars_map.png",  0 | BGFX_TEXTURE_U_MIRROR
 					  | BGFX_TEXTURE_V_MIRROR
 					  | BGFX_TEXTURE_W_MIRROR);
@@ -165,7 +165,7 @@ void BaseApplication::run()
 		// Advance to next frame. Rendering thread will be kicked to
 		// process submitted rendering primitives.
 		bgfx::frame();
-		
+
 		while(SDL_PollEvent(&event))
 		{
 			switch(event.type)
@@ -185,7 +185,7 @@ void BaseApplication::run()
 					exit = true;
 				}
 				break;
-				
+
 			}
 			case SDL_MOUSEBUTTONDOWN:
 			{
@@ -197,7 +197,7 @@ void BaseApplication::run()
 			case SDL_WINDOWEVENT:
 			{
 				//needed to resize the rendering window
-				
+
 				if(event.window.event == SDL_WINDOWEVENT_RESIZED)
 				{
 					m_width = event.window.data1;
@@ -206,7 +206,7 @@ void BaseApplication::run()
 
 					bgfx::reset(m_width, m_height, reset);
 				}
-				
+
 			}
 			}
 		}
@@ -216,6 +216,6 @@ void BaseApplication::run()
 	delete mesh;
 	delete atmo;
 
-	bgfx::destroyProgram(planet_program);
-	bgfx::destroyProgram(atmo_program);
+	bgfx::destroy(planet_program);
+	bgfx::destroy(atmo_program);
 }

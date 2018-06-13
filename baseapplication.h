@@ -8,9 +8,9 @@
 
 #include <stdio.h>
 #include <bx/handlealloc.h>
-#include <bx/fpumath.h>
 #include <bx/readerwriter.h>
 #include <bx/string.h>
+#include <bx/math.h>
 
 #include <GL/gl.h>
 
@@ -39,7 +39,7 @@ protected:
 	float m_distance;
 	float m_rotate;
 	ProgramLoader m_programloader;
-	
+
 	bgfx::UniformHandle cameraPosition;
 };
 

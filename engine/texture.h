@@ -3,9 +3,9 @@
 
 #include <bgfx/bgfx.h>
 #include <bx/readerwriter.h>
+#include <bx/file.h>
 #include <bgfx/platform.h>
 #include <bgfx/defines.h>
-#include <bx/crtimpl.h>
 #include "memory.h"
 
 
@@ -20,8 +20,8 @@ public:
 	void setStage(int _stage);
 	void setTexture() const;
 
-	
-protected:   
+
+protected:
 	bgfx::TextureHandle m_texture;
 	bgfx::UniformHandle m_uniform;
 	int m_stage;

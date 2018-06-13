@@ -13,8 +13,8 @@ Texture::Texture(int _stage) : m_stage(_stage)
 
 Texture::~Texture()
 {
-	bgfx::destroyTexture(m_texture);
-	bgfx::destroyUniform(m_uniform);
+	bgfx::destroy(m_texture);
+	bgfx::destroy(m_uniform);
 }
 
 void Texture::loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgfx::TextureInfo* _info)
@@ -29,8 +29,8 @@ void Texture::loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgf
 	strcat(filePath, _name);
 
 	bgfx::TextureHandle handle = BGFX_INVALID_HANDLE;
-	bx::CrtAllocator allocator;
-	bx::CrtFileReader _reader;
+	bx::DefaultAllocator allocator;
+	bx::FileReader _reader;
 	uint32_t size = 0;
 	void* data = loadMem(&_reader, &allocator, filePath, &size);
 	if (NULL != data)
@@ -40,7 +40,7 @@ void Texture::loadTexture(const char* _name, uint32_t _flags, uint8_t _skip, bgf
 		int comp   = 0;
 
 		uint8_t* img = NULL;
-		
+
 		img = stbi_load_from_memory( (uint8_t*)data, size, &width, &height, &comp, 4);
 		BX_FREE(&allocator, data);
 
